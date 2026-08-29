@@ -1,708 +1,341 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="description" content="SatsAkademie – Bitcoin-Bildung in Theorie und Praxis, von der Selbstverwahrung bis zur eigenen Full Node. Die Website befindet sich im Aufbau.">
 <title>SatsAkademie</title>
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<link rel="preconnect" href="https://fonts.googleapis.com" />
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:ital,wght@0,400;0,600;0,700;1,400&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
-
 <style>
-  /* ---------- tokens ---------- */
-  :root {
-    --bg: #f4efe3;
-    --bg-raised: #ffffff;
-    --bg-sunken: #eae2d0;
-    --ink: #211c12;
-    --ink-dim: #6e6350;
-    --accent: #c2650a;
-    --accent-strong: #a8560a;
-    --on-accent: #fff8ee;
-    --line: #dcd2ba;
-    --line-node: #c7ba9c;
-
-    --font-display: "IBM Plex Serif", Georgia, "Times New Roman", serif;
-    --font-body: "IBM Plex Sans", -apple-system, "Segoe UI", sans-serif;
-    --font-mono: "IBM Plex Mono", "SFMono-Regular", Consolas, monospace;
-
-    --radius: 3px;
-    --wrap: 1080px;
+  :root{
+    --bg-1:#131a2c;
+    --bg-2:#0a0e1a;
+    --bg-3:#060810;
+    --accent:#f7931a;
+    --accent-soft:#ffb14e;
+    --heading:#f4f6fb;
+    --body:#b9c2d6;
+    --muted:#6b7590;
+    --line:rgba(255,255,255,0.09);
+    --focus:#ffcf8c;
   }
 
-  @media (prefers-color-scheme: dark) {
-    :root:not([data-theme="light"]) {
-      --bg: #16130e;
-      --bg-raised: #1e1911;
-      --bg-sunken: #100d09;
-      --ink: #f3e9d8;
-      --ink-dim: #b3a68c;
-      --accent: #f7931a;
-      --accent-strong: #ffab3d;
-      --on-accent: #1a1006;
-      --line: #362e20;
-      --line-node: #4a3f2b;
-    }
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html,body{
+    min-height:100%;
+    background:
+      radial-gradient(circle at 20% 0%, var(--bg-1) 0%, var(--bg-2) 55%, var(--bg-3) 100%);
+    color:var(--body);
+    font-family:"IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+    overflow-x:hidden;
   }
 
-  :root[data-theme="dark"] {
-    --bg: #16130e;
-    --bg-raised: #1e1911;
-    --bg-sunken: #100d09;
-    --ink: #f3e9d8;
-    --ink-dim: #b3a68c;
-    --accent: #f7931a;
-    --accent-strong: #ffab3d;
-    --on-accent: #1a1006;
-    --line: #362e20;
-    --line-node: #4a3f2b;
+  a{ color:inherit; }
+  a:focus-visible, button:focus-visible{
+    outline:2px solid var(--focus);
+    outline-offset:3px;
+    border-radius:2px;
   }
 
-  /* ---------- reset ---------- */
-  * { box-sizing: border-box; }
-  html { -webkit-text-size-adjust: 100%; }
-  body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--ink);
-    font-family: var(--font-body);
-    font-size: 16px;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-  }
-  img, canvas, svg { display: block; max-width: 100%; }
-  a { color: inherit; }
-  h1, h2, h3, p, ul, dl, dd, dt { margin: 0; }
-  ul { padding: 0; list-style: none; }
-  button { font: inherit; }
-
-  ::selection { background: var(--accent); color: var(--on-accent); }
-
-  :focus-visible {
-    outline: 2px solid var(--accent);
-    outline-offset: 3px;
+  #net{
+    position:fixed;
+    inset:0;
+    width:100%;
+    height:100%;
+    display:block;
   }
 
-  @media (prefers-reduced-motion: reduce) {
-    * { animation-duration: 0.001ms !important; animation-iteration-count: 1 !important; transition-duration: 0.001ms !important; scroll-behavior: auto !important; }
+  main{
+    position:relative;
+    z-index:2;
+    min-height:100vh;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    text-align:center;
+    padding:48px 24px;
+    gap:0;
   }
 
-  .wrap {
-    max-width: var(--wrap);
-    margin-inline: auto;
-    padding-inline: 1.5rem;
+  .mark{
+    width:76px;
+    height:76px;
+    filter:drop-shadow(0 0 22px rgba(247,147,26,0.35));
   }
 
-  .eyebrow {
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--accent);
+  .wordmark{
+    margin-top:22px;
+    font-family:"IBM Plex Serif", ui-serif, Georgia, serif;
+    font-weight:600;
+    font-size:clamp(28px, 4vw, 36px);
+    letter-spacing:-0.3px;
+    color:var(--heading);
   }
 
-  h2.section-title {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: clamp(1.6rem, 3.4vw, 2.4rem);
-    text-wrap: balance;
-    margin-top: 0.5rem;
+  .tagline{
+    margin-top:10px;
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:12px;
+    font-weight:500;
+    letter-spacing:2.5px;
+    text-transform:uppercase;
+    color:var(--accent-soft);
   }
 
-  .lede {
-    font-size: 1.05rem;
-    color: var(--ink-dim);
-    max-width: 62ch;
-    margin-top: 1rem;
+  .status{
+    margin-top:40px;
+    display:inline-flex;
+    align-items:center;
+    gap:10px;
+    padding:8px 16px;
+    border-radius:999px;
+    border:1px solid rgba(247,147,26,0.35);
+    background:rgba(247,147,26,0.07);
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:12px;
+    font-weight:500;
+    letter-spacing:1.5px;
+    text-transform:uppercase;
+    color:var(--accent-soft);
   }
 
-  .btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 0.5rem;
-    font-family: var(--font-mono);
-    font-size: 0.82rem;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    text-decoration: none;
-    padding: 0.85rem 1.4rem;
-    border-radius: var(--radius);
-    border: 1px solid transparent;
-    cursor: pointer;
-    transition: transform 0.15s ease, background 0.15s ease, border-color 0.15s ease;
-  }
-  .btn:hover { transform: translateY(-1px); }
-  .btn-primary { background: var(--accent); color: var(--on-accent); }
-  .btn-primary:hover { background: var(--accent-strong); }
-  .btn-ghost { border-color: var(--line-node); color: var(--ink); }
-  .btn-ghost:hover { border-color: var(--accent); color: var(--accent); }
-
-  /* ---------- nav ---------- */
-  .nav {
-    position: sticky;
-    top: 0;
-    z-index: 40;
-    background: var(--bg);
-    border-bottom: 1px solid var(--line);
-  }
-  .nav .wrap {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
-    padding-block: 1rem;
-  }
-  .wordmark {
-    font-family: var(--font-mono);
-    font-weight: 500;
-    letter-spacing: 0.06em;
-    font-size: 0.95rem;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: baseline;
-    gap: 0.55rem;
-  }
-  .wordmark .dot { color: var(--accent); }
-  .nav-links {
-    display: flex;
-    gap: 1.6rem;
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-  }
-  .nav-links a { text-decoration: none; color: var(--ink-dim); border-bottom: 1px solid transparent; padding-bottom: 2px; }
-  .nav-links a:hover { color: var(--ink); border-color: var(--line-node); }
-  .nav-right { display: flex; align-items: center; gap: 0.9rem; }
-  .badge {
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--ink-dim);
-    border: 1px solid var(--line-node);
-    border-radius: 100px;
-    padding: 0.3rem 0.65rem;
-    white-space: nowrap;
-  }
-  @media (max-width: 760px) {
-    .nav-links { display: none; }
+  .status .dot{
+    width:7px;
+    height:7px;
+    border-radius:50%;
+    background:var(--accent);
+    box-shadow:0 0 0 0 rgba(247,147,26,0.6);
+    animation:pulse 2.2s ease-out infinite;
   }
 
-  /* ---------- hero ---------- */
-  .hero {
-    position: relative;
-    overflow: hidden;
-    border-bottom: 1px solid var(--line);
-  }
-  .hero canvas {
-    position: absolute;
-    inset: 0;
-    width: 100%;
-    height: 100%;
-    opacity: 0.55;
-  }
-  .hero-inner {
-    position: relative;
-    padding-block: clamp(4rem, 10vw, 7rem) clamp(3rem, 8vw, 5rem);
-  }
-  .hero h1 {
-    font-family: var(--font-display);
-    font-weight: 700;
-    font-size: clamp(2.4rem, 6vw, 4.1rem);
-    line-height: 1.06;
-    text-wrap: balance;
-    margin-top: 0.9rem;
-    max-width: 16ch;
-  }
-  .hero .lede { font-size: 1.15rem; }
-  .hero-actions {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.9rem;
-    margin-top: 2rem;
-  }
-  .status-line {
-    margin-top: 2.5rem;
-    padding-top: 1.1rem;
-    border-top: 1px solid var(--line);
-    font-family: var(--font-mono);
-    font-size: 0.74rem;
-    letter-spacing: 0.03em;
-    color: var(--ink-dim);
-    display: flex;
-    flex-wrap: wrap;
-    gap: 0.4rem 0.9rem;
-  }
-  .status-line b { color: var(--ink); font-weight: 500; }
-
-  /* ---------- generic section ---------- */
-  section { padding-block: clamp(3.5rem, 8vw, 6rem); }
-  section + section { border-top: 1px solid var(--line); }
-
-  /* ---------- story ---------- */
-  .story-grid {
-    display: grid;
-    grid-template-columns: 1.1fr 0.9fr;
-    gap: clamp(2rem, 5vw, 4rem);
-    align-items: start;
-    margin-top: 2rem;
-  }
-  .story-copy p { margin-top: 1.1rem; color: var(--ink-dim); max-width: 58ch; }
-  .story-copy p:first-of-type { margin-top: 0; }
-  .story-copy strong { color: var(--ink); font-weight: 600; }
-
-  .schema {
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    background: var(--bg-raised);
-    padding: 1.6rem;
-  }
-  .schema-cap {
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--ink-dim);
-    margin-bottom: 1rem;
-  }
-  .schema svg { width: 100%; height: auto; }
-  .schema-legend {
-    margin-top: 1.1rem;
-    display: grid;
-    gap: 0.4rem;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--ink-dim);
-  }
-  .schema-legend span b { color: var(--ink); font-weight: 500; }
-
-  @media (max-width: 820px) {
-    .story-grid { grid-template-columns: 1fr; }
+  @keyframes pulse{
+    0%{ box-shadow:0 0 0 0 rgba(247,147,26,0.55); }
+    70%{ box-shadow:0 0 0 9px rgba(247,147,26,0); }
+    100%{ box-shadow:0 0 0 0 rgba(247,147,26,0); }
   }
 
-  /* ---------- path / modules ---------- */
-  .path { position: relative; margin-top: 2.5rem; }
-  .path::before {
-    content: "";
-    position: absolute;
-    left: 27px;
-    top: 0;
-    bottom: 0;
-    width: 1px;
-    background: var(--line-node);
-  }
-  .path-item {
-    position: relative;
-    display: grid;
-    grid-template-columns: 56px 1fr;
-    gap: 1.4rem;
-    padding-block: 1.7rem;
-  }
-  .path-item:first-child { padding-top: 0; }
-  .path-item:not(:last-child) { border-bottom: 1px dashed var(--line); }
-  .path-marker {
-    position: relative;
-    z-index: 1;
-    width: 44px;
-    height: 44px;
-    border-radius: 50%;
-    border: 1px solid var(--line-node);
-    background: var(--bg);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-family: var(--font-mono);
-    font-size: 0.72rem;
-    color: var(--ink-dim);
-  }
-  .path-item.is-final .path-marker {
-    background: var(--accent);
-    border-color: var(--accent);
-    color: var(--on-accent);
-  }
-  .path-head {
-    display: flex;
-    flex-wrap: wrap;
-    align-items: baseline;
-    gap: 0.7rem;
-    justify-content: space-between;
-  }
-  .path-title {
-    font-family: var(--font-display);
-    font-weight: 600;
-    font-size: 1.18rem;
-  }
-  .path-tag {
-    font-family: var(--font-mono);
-    font-size: 0.66rem;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-    color: var(--accent);
-    white-space: nowrap;
-  }
-  .path-desc { margin-top: 0.45rem; color: var(--ink-dim); max-width: 58ch; }
-
-  /* ---------- two-up panels (support / shop) ---------- */
-  .panels {
-    display: grid;
-    grid-template-columns: 1.3fr 1fr;
-    gap: 1px;
-    margin-top: 2rem;
-    background: var(--line);
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    overflow: hidden;
-  }
-  .panel { background: var(--bg); padding: clamp(1.6rem, 3vw, 2.4rem); }
-  .panel .lede { margin-top: 0.9rem; font-size: 1rem; }
-  .panel .btn { margin-top: 1.5rem; }
-  @media (max-width: 760px) {
-    .panels { grid-template-columns: 1fr; }
+  @media (prefers-reduced-motion: reduce){
+    .status .dot{ animation:none; }
   }
 
-  /* ---------- instagram ---------- */
-  .insta-row {
-    margin-top: 2rem;
-    display: flex;
-    flex-wrap: wrap;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
-    border: 1px solid var(--line);
-    border-radius: var(--radius);
-    padding: 1.8rem;
-    background: var(--bg-raised);
+  h1{
+    margin-top:28px;
+    max-width:15ch;
+    font-family:"IBM Plex Serif", ui-serif, Georgia, serif;
+    font-weight:700;
+    font-size:clamp(34px, 6vw, 58px);
+    line-height:1.08;
+    letter-spacing:-1px;
+    color:var(--heading);
+    text-wrap:balance;
   }
-  .insta-row .lede { margin-top: 0.4rem; }
 
-  /* ---------- footer ---------- */
-  footer { padding-block: 3rem; }
-  .foot-grid {
-    display: grid;
-    grid-template-columns: 1.2fr 1fr 1fr;
-    gap: 2rem;
+  p.lede{
+    margin-top:24px;
+    max-width:56ch;
+    font-size:clamp(16px, 2vw, 19px);
+    line-height:1.6;
+    color:var(--body);
+    text-wrap:balance;
   }
-  .foot-col .eyebrow { display: block; margin-bottom: 0.8rem; }
-  .foot-col a, .foot-col p { color: var(--ink-dim); text-decoration: none; font-size: 0.92rem; }
-  .foot-col a { display: block; margin-bottom: 0.5rem; }
-  .foot-col a:hover { color: var(--accent); }
-  .foot-bottom {
-    margin-top: 2.5rem;
-    padding-top: 1.5rem;
-    border-top: 1px solid var(--line);
-    font-family: var(--font-mono);
-    font-size: 0.7rem;
-    color: var(--ink-dim);
-    letter-spacing: 0.03em;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 0.6rem;
+
+  .contact{
+    margin-top:38px;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:14px;
   }
-  @media (max-width: 760px) {
-    .foot-grid { grid-template-columns: 1fr; gap: 1.8rem; }
+
+  .contact-line{
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:14px;
+    color:var(--muted);
+  }
+
+  .contact-line a{
+    color:var(--accent-soft);
+    text-decoration:none;
+    border-bottom:1px solid rgba(255,177,78,0.4);
+    padding-bottom:1px;
+    transition:border-color .15s ease, color .15s ease;
+  }
+
+  .contact-line a:hover{
+    color:var(--heading);
+    border-color:var(--heading);
+  }
+
+  .insta{
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:12px;
+    letter-spacing:0.5px;
+    color:var(--muted);
+    text-decoration:none;
+    border-bottom:1px solid transparent;
+    transition:color .15s ease, border-color .15s ease;
+  }
+
+  .insta:hover{
+    color:var(--body);
+    border-color:var(--muted);
+  }
+
+  footer{
+    position:relative;
+    z-index:2;
+    text-align:center;
+    padding-bottom:26px;
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:11px;
+    letter-spacing:0.5px;
+    color:var(--muted);
+    opacity:0.7;
+  }
+
+  @media (max-width:480px){
+    .mark{ width:60px; height:60px; }
+    .status{ font-size:11px; padding:7px 14px; }
   }
 </style>
 
-<nav class="nav">
-  <div class="wrap">
-    <a class="wordmark" href="#top">SATS<span class="dot">·</span>AKADEMIE</a>
-    <div class="nav-links">
-      <a href="#kursreihe">Kursreihe</a>
-      <a href="#werkbank">Ablauf</a>
-      <a href="#support">Support</a>
-      <a href="#kontakt">Kontakt</a>
-    </div>
-    <div class="nav-right">
-      <span class="badge" title="Website im Aufbau — Verkaufsstart folgt">Vorschau</span>
-      <a class="btn btn-primary" href="#kursreihe">Kursreihe ansehen</a>
-    </div>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Serif:wght@600;700&family=IBM+Plex+Sans:wght@400;500&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet">
+</head>
+<body>
+<canvas id="net" aria-hidden="true"></canvas>
+
+<main>
+  <svg class="mark" viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="SatsAkademie Logo">
+    <line x1="256" y1="256" x2="406" y2="256" stroke="#f7931a" stroke-width="22" stroke-linecap="round" opacity="0.9"/>
+    <line x1="256" y1="256" x2="331" y2="386" stroke="#f7931a" stroke-width="22" stroke-linecap="round" opacity="0.9"/>
+    <line x1="256" y1="256" x2="181" y2="386" stroke="#f7931a" stroke-width="22" stroke-linecap="round" opacity="0.9"/>
+    <line x1="256" y1="256" x2="106" y2="256" stroke="#f7931a" stroke-width="22" stroke-linecap="round" opacity="0.9"/>
+    <line x1="256" y1="256" x2="181" y2="126" stroke="#f7931a" stroke-width="22" stroke-linecap="round" opacity="0.9"/>
+    <line x1="256" y1="256" x2="331" y2="126" stroke="#f7931a" stroke-width="22" stroke-linecap="round" opacity="0.9"/>
+    <circle cx="406" cy="256" r="27" fill="none" stroke="#f7931a" stroke-width="20"/>
+    <circle cx="331" cy="386" r="27" fill="none" stroke="#f7931a" stroke-width="20"/>
+    <circle cx="181" cy="386" r="27" fill="none" stroke="#f7931a" stroke-width="20"/>
+    <circle cx="106" cy="256" r="27" fill="none" stroke="#f7931a" stroke-width="20"/>
+    <circle cx="181" cy="126" r="27" fill="none" stroke="#f7931a" stroke-width="20"/>
+    <circle cx="331" cy="126" r="27" fill="none" stroke="#f7931a" stroke-width="20"/>
+    <circle cx="256" cy="256" r="58" fill="#f7931a"/>
+  </svg>
+
+  <div class="wordmark">SatsAkademie</div>
+  <div class="tagline">Bitcoin verstehen. Selbst verwalten.</div>
+
+  <div class="status"><span class="dot"></span>Im Aufbau</div>
+
+  <h1>Bitcoin-Bildung in Theorie und Praxis.</h1>
+
+  <p class="lede">
+    Von der ersten Selbstverwahrung bis zur eigenen Full Node — sieben Module,
+    entstanden an echter Hardware, Schritt für Schritt dokumentiert. Wir bauen
+    gerade an eurem Zugang. Seid gespannt.
+  </p>
+
+  <div class="contact">
+    <div class="contact-line">Vorab-Infos gewünscht? <a href="mailto:kontakt@satsakademie.de">kontakt@satsakademie.de</a></div>
+    <a class="insta" href="https://instagram.com/satsakademie" target="_blank" rel="noopener">@satsakademie auf Instagram</a>
   </div>
-</nav>
+</main>
 
-<header class="hero" id="top">
-  <canvas id="nodeCanvas" aria-hidden="true"></canvas>
-  <div class="wrap hero-inner">
-    <p class="eyebrow">Bitcoin-Bildung aus der Praxis</p>
-    <h1>Erst selbst gebaut.<br />Dann erklärt.</h1>
-    <p class="lede">SatsAkademie ist eine Kursreihe für alle, die Bitcoin nicht nur verstehen, sondern selbst betreiben wollen – von der ersten Selbstverwahrung bis zur eigenen souveränen Full Node. Jedes Modul ist an echter Hardware entstanden, dokumentiert Schritt für Schritt, inklusive einem persönlichen 1:1-Support-Termin.</p>
-    <div class="hero-actions">
-      <a class="btn btn-primary" href="#kursreihe">Kursreihe ansehen</a>
-      <a class="btn btn-ghost" href="#support">1:1-Slot buchen</a>
-    </div>
-    <div class="status-line">
-      <span><b>7</b> Module</span>
-      <span>·</span>
-      <span>Aufbau auf <b>Raspberry&nbsp;Pi&nbsp;5</b></span>
-      <span>·</span>
-      <span><b>1:1-Support</b> inklusive</span>
-      <span>·</span>
-      <span>Vorschau — Verkaufsstart folgt</span>
-    </div>
-  </div>
-</header>
-
-<section id="werkbank">
-  <div class="wrap story-grid">
-    <div class="story-copy">
-      <p class="eyebrow">Die Werkbank hinter der Kursreihe</p>
-      <h2 class="section-title">Warum diese Kurse existieren</h2>
-      <p>Alles begann mit einem eigenen Projekt: eine vollwertige Bitcoin- und Lightning-Node aufbauen, Schritt für Schritt, mit einem <strong>Raspberry Pi 5</strong> und <strong>RaspiBlitz</strong>. Jeder Handgriff wurde mit eigenen Fotos und Screenshots dokumentiert – nicht als nachträgliche Anleitung, sondern als Protokoll eines echten Aufbaus.</p>
-      <p>Aus diesem Protokoll ist SatsAkademie entstanden: sieben Module, die genau den Weg nachzeichnen, den man selbst gehen muss, um bei Bitcoin nicht mehr auf fremde Server oder fremde Verwahrung angewiesen zu sein. Jedes Modul endet dort, wo das nächste beginnt.</p>
-      <p>Kein Stockfoto-Kurs, keine zusammenkopierten Folien – jede Lektion ist an der eigenen Hardware entstanden und wird laufend um echte Betriebserfahrung ergänzt.</p>
-    </div>
-    <div class="schema">
-      <p class="schema-cap">Setup · Modul 4–5</p>
-      <svg viewBox="0 0 320 220" role="img" aria-label="Schema: Raspberry Pi 5 mit RaspiBlitz, verbunden mit Bitbox, Bitaxe und Zeus-Wallet">
-        <g fill="none" stroke="var(--line-node)" stroke-width="1">
-          <rect x="110" y="80" width="100" height="60" rx="3" />
-          <line x1="160" y1="80" x2="160" y2="40" />
-          <line x1="160" y1="140" x2="160" y2="180" />
-          <line x1="110" y1="110" x2="55" y2="110" />
-          <line x1="210" y1="110" x2="265" y2="110" />
-        </g>
-        <circle cx="160" cy="30" r="10" fill="none" stroke="var(--accent)" stroke-width="1.3" />
-        <circle cx="45" cy="110" r="10" fill="none" stroke="var(--line-node)" stroke-width="1.3" />
-        <circle cx="275" cy="110" r="10" fill="none" stroke="var(--line-node)" stroke-width="1.3" />
-        <circle cx="160" cy="190" r="10" fill="none" stroke="var(--line-node)" stroke-width="1.3" />
-        <text x="160" y="115" text-anchor="middle" font-family="IBM Plex Mono" font-size="9" fill="var(--ink)">RaspiBlitz</text>
-        <text x="160" y="18" text-anchor="middle" font-family="IBM Plex Mono" font-size="8" fill="var(--ink-dim)">Full Node</text>
-        <text x="45" y="90" text-anchor="middle" font-family="IBM Plex Mono" font-size="8" fill="var(--ink-dim)">Bitbox</text>
-        <text x="275" y="90" text-anchor="middle" font-family="IBM Plex Mono" font-size="8" fill="var(--ink-dim)">Bitaxe</text>
-        <text x="160" y="208" text-anchor="middle" font-family="IBM Plex Mono" font-size="8" fill="var(--ink-dim)">Zeus</text>
-      </svg>
-      <div class="schema-legend">
-        <span>Modul 4 → <b>Node aufsetzen</b></span>
-        <span>Modul 5 → <b>Alles zusammenführen, souverän betreiben</b></span>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="kursreihe">
-  <div class="wrap">
-    <p class="eyebrow">Sieben Module, ein Weg</p>
-    <h2 class="section-title">Die Kursreihe</h2>
-    <p class="lede">Jedes Modul baut auf dem vorherigen auf. Am Ende hast du nicht nur verstanden, wie Bitcoin funktioniert – du betreibst deine eigene Infrastruktur.</p>
-
-    <div class="path">
-      <div class="path-item">
-        <div class="path-marker">01</div>
-        <div>
-          <div class="path-head">
-            <span class="path-title">Warum Bitcoin die Zukunft ist</span>
-            <span class="path-tag">Inkl. 1:1-Support</span>
-          </div>
-          <p class="path-desc">Grundlagen: Geldtheorie, Funktionsweise von Bitcoin und warum Selbstverwahrung überhaupt zählt.</p>
-        </div>
-      </div>
-      <div class="path-item">
-        <div class="path-marker">02</div>
-        <div>
-          <div class="path-head">
-            <span class="path-title">Deine eigene Bitbox</span>
-            <span class="path-tag">Inkl. 1:1-Support</span>
-          </div>
-          <p class="path-desc">Erste Selbstverwahrung: Hardware-Wallet einrichten und Seed sicher anlegen.</p>
-        </div>
-      </div>
-      <div class="path-item">
-        <div class="path-marker">03</div>
-        <div>
-          <div class="path-head">
-            <span class="path-title">Bitaxe &amp; Terminal einrichten</span>
-            <span class="path-tag">Inkl. 1:1-Support</span>
-          </div>
-          <p class="path-desc">Aktive Teilnahme am Netzwerk: eigene Mining-Hardware und die ersten Schritte im Terminal.</p>
-        </div>
-      </div>
-      <div class="path-item">
-        <div class="path-marker">04</div>
-        <div>
-          <div class="path-head">
-            <span class="path-title">Deine eigene Full Node</span>
-            <span class="path-tag">Inkl. 1:1-Support</span>
-          </div>
-          <p class="path-desc">Der technische Höhepunkt: RaspiBlitz auf dem Raspberry Pi 5 – von der Teileliste bis zum laufenden Betrieb.</p>
-        </div>
-      </div>
-      <div class="path-item">
-        <div class="path-marker">05</div>
-        <div>
-          <div class="path-head">
-            <span class="path-title">Node Souverän</span>
-            <span class="path-tag">Inkl. 1:1-Support</span>
-          </div>
-          <p class="path-desc">Bitbox, Bitaxe und Zeus-Wallet zusammenführen – inklusive laufendem Betrieb, Gebühren und Backups.</p>
-        </div>
-      </div>
-      <div class="path-item">
-        <div class="path-marker">06</div>
-        <div>
-          <div class="path-head">
-            <span class="path-title">Überschussstrom sinnvoll nutzen</span>
-            <span class="path-tag">Inkl. 1:1-Support</span>
-          </div>
-          <p class="path-desc">PV- und Balkonkraftwerk-Mining: wenn die eigene Energie zur eigenen Node passt.</p>
-        </div>
-      </div>
-      <div class="path-item is-final">
-        <div class="path-marker">07</div>
-        <div>
-          <div class="path-head">
-            <span class="path-title">Souverän auf lange Sicht</span>
-            <span class="path-tag">Inkl. 1:1-Support</span>
-          </div>
-          <p class="path-desc">Multisig, Vererbung, Tor und Privacy – damit die eigene Souveränität über Jahrzehnte trägt.</p>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="support">
-  <div class="wrap">
-    <p class="eyebrow">In jedem Modul enthalten</p>
-    <h2 class="section-title">Persönlicher Support, kein Ticket-System</h2>
-
-    <div class="panels">
-      <div class="panel">
-        <p class="eyebrow">1:1-Termin</p>
-        <h3 class="section-title" style="font-size: 1.3rem; margin-top: 0.6rem;">Ein echtes Gespräch statt Forum</h3>
-        <p class="lede">Jedes Modul enthält einen gebuchten 1:1-Termin – für die Fragen, die keine Anleitung beantwortet: dein Setup, deine Fehlermeldung, dein nächster Schritt.</p>
-        <a class="btn btn-ghost" href="mailto:kontakt@satsakademie.de?subject=1:1-Termin">Termin anfragen · Kalender folgt</a>
-      </div>
-      <div class="panel">
-        <p class="eyebrow">In Vorbereitung</p>
-        <h3 class="section-title" style="font-size: 1.3rem; margin-top: 0.6rem;">Kleiner Shop</h3>
-        <p class="lede">Passendes Zubehör für den eigenen Aufbau – kuratiert, nicht x-beliebig. Startet, sobald die ersten Produkte feststehen.</p>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section id="instagram">
-  <div class="wrap">
-    <p class="eyebrow">@satsakademie</p>
-    <h2 class="section-title">Der Aufbau live mitverfolgen</h2>
-    <div class="insta-row">
-      <div>
-        <p class="lede" style="margin-top: 0;">Fotos, Zwischenstände, kleine Fehler inklusive – der komplette Aufbau entsteht öffentlich dokumentiert.</p>
-      </div>
-      <a class="btn btn-primary" href="https://instagram.com/satsakademie" target="_blank" rel="noopener">Auf Instagram folgen</a>
-    </div>
-  </div>
-</section>
-
-<footer id="kontakt">
-  <div class="wrap">
-    <div class="foot-grid">
-      <div class="foot-col">
-        <span class="eyebrow">SatsAkademie</span>
-        <p>Bitcoin-Bildung aus der Praxis – vom ersten Selbstverwahrungs-Schritt bis zur souveränen Node.</p>
-      </div>
-      <div class="foot-col">
-        <span class="eyebrow">Kontakt</span>
-        <a href="mailto:kontakt@satsakademie.de">kontakt@satsakademie.de</a>
-        <a href="https://instagram.com/satsakademie" target="_blank" rel="noopener">Instagram</a>
-      </div>
-      <div class="foot-col">
-        <span class="eyebrow">Rechtliches</span>
-        <p>Impressum &amp; Datenschutzerklärung folgen nach Abschluss der Gewerbeanmeldung.</p>
-      </div>
-    </div>
-    <div class="foot-bottom">
-      <span>© 2026 SatsAkademie</span>
-      <span>Vorschau — Verkaufsstart folgt</span>
-    </div>
-  </div>
-</footer>
+<footer>© 2026 SatsAkademie</footer>
 
 <script>
-  (function () {
-    var canvas = document.getElementById("nodeCanvas");
-    var ctx = canvas.getContext("2d");
-    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var nodes = [];
-    var W = 0, H = 0, DPR = Math.min(window.devicePixelRatio || 1, 2);
+(function(){
+  var canvas = document.getElementById('net');
+  var ctx = canvas.getContext('2d');
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+  var w, h, nodes, dpr;
 
-    function isDark() {
-      var stamp = document.documentElement.getAttribute("data-theme");
-      if (stamp === "dark") return true;
-      if (stamp === "light") return false;
-      return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  function resize(){
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    w = window.innerWidth;
+    h = window.innerHeight;
+    canvas.width = w * dpr;
+    canvas.height = h * dpr;
+    canvas.style.width = w + 'px';
+    canvas.style.height = h + 'px';
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    seed();
+  }
+
+  function seed(){
+    var count = Math.max(18, Math.min(46, Math.round((w * h) / 42000)));
+    nodes = [];
+    for (var i = 0; i < count; i++){
+      nodes.push({
+        x: Math.random() * w,
+        y: Math.random() * h,
+        vx: (Math.random() - 0.5) * 0.12,
+        vy: (Math.random() - 0.5) * 0.12,
+        hub: i === 0
+      });
     }
+  }
 
-    function resize() {
-      var rect = canvas.parentElement.getBoundingClientRect();
-      W = rect.width;
-      H = rect.height;
-      canvas.width = W * DPR;
-      canvas.height = H * DPR;
-      canvas.style.width = W + "px";
-      canvas.style.height = H + "px";
-      ctx.setTransform(DPR, 0, 0, DPR, 0, 0);
-
-      var count = Math.max(14, Math.round((W * H) / 26000));
-      nodes = [];
-      for (var i = 0; i < count; i++) {
-        nodes.push({
-          x: Math.random() * W,
-          y: Math.random() * H,
-          vx: (Math.random() - 0.5) * 0.12,
-          vy: (Math.random() - 0.5) * 0.12,
-        });
-      }
+  function step(){
+    for (var i = 0; i < nodes.length; i++){
+      var n = nodes[i];
+      n.x += n.vx;
+      n.y += n.vy;
+      if (n.x < -20 || n.x > w + 20) n.vx *= -1;
+      if (n.y < -20 || n.y > h + 20) n.vy *= -1;
     }
+  }
 
-    function draw() {
-      ctx.clearRect(0, 0, W, H);
-      var dark = isDark();
-      var lineColor = dark ? "247,147,26" : "194,101,10";
-      var dotColor = dark ? "243,233,216" : "33,28,18";
+  function draw(){
+    ctx.clearRect(0, 0, w, h);
+    var linkDist = Math.min(180, Math.max(120, w / 8));
 
-      for (var i = 0; i < nodes.length; i++) {
-        for (var j = i + 1; j < nodes.length; j++) {
-          var a = nodes[i], b = nodes[j];
-          var dx = a.x - b.x, dy = a.y - b.y;
-          var dist = Math.sqrt(dx * dx + dy * dy);
-          if (dist < 150) {
-            ctx.strokeStyle = "rgba(" + lineColor + "," + (0.16 * (1 - dist / 150)) + ")";
-            ctx.lineWidth = 1;
-            ctx.beginPath();
-            ctx.moveTo(a.x, a.y);
-            ctx.lineTo(b.x, b.y);
-            ctx.stroke();
-          }
+    for (var i = 0; i < nodes.length; i++){
+      for (var j = i + 1; j < nodes.length; j++){
+        var a = nodes[i], b = nodes[j];
+        var dx = a.x - b.x, dy = a.y - b.y;
+        var dist = Math.sqrt(dx * dx + dy * dy);
+        if (dist < linkDist){
+          var alpha = (1 - dist / linkDist) * 0.14;
+          ctx.strokeStyle = 'rgba(185,194,214,' + alpha.toFixed(3) + ')';
+          ctx.lineWidth = 1;
+          ctx.beginPath();
+          ctx.moveTo(a.x, a.y);
+          ctx.lineTo(b.x, b.y);
+          ctx.stroke();
         }
       }
-      for (var k = 0; k < nodes.length; k++) {
-        ctx.fillStyle = "rgba(" + dotColor + ",0.5)";
-        ctx.beginPath();
-        ctx.arc(nodes[k].x, nodes[k].y, 1.6, 0, Math.PI * 2);
-        ctx.fill();
+    }
+
+    for (var k = 0; k < nodes.length; k++){
+      var n = nodes[k];
+      ctx.beginPath();
+      if (n.hub){
+        ctx.fillStyle = 'rgba(247,147,26,0.55)';
+        ctx.arc(n.x, n.y, 2.6, 0, Math.PI * 2);
+      } else {
+        ctx.fillStyle = 'rgba(185,194,214,0.35)';
+        ctx.arc(n.x, n.y, 1.6, 0, Math.PI * 2);
       }
+      ctx.fill();
     }
+  }
 
-    function step() {
-      for (var i = 0; i < nodes.length; i++) {
-        var n = nodes[i];
-        n.x += n.vx;
-        n.y += n.vy;
-        if (n.x < 0 || n.x > W) n.vx *= -1;
-        if (n.y < 0 || n.y > H) n.vy *= -1;
-      }
-      draw();
-      if (!reduce) requestAnimationFrame(step);
-    }
+  function loop(){
+    step();
+    draw();
+    requestAnimationFrame(loop);
+  }
 
-    window.addEventListener("resize", function () {
-      resize();
-      draw();
-    });
-
-    resize();
-    if (reduce) {
-      draw();
-    } else {
-      requestAnimationFrame(step);
-    }
-  })();
+  window.addEventListener('resize', resize);
+  resize();
+  draw();
+  if (!reduceMotion){
+    requestAnimationFrame(loop);
+  }
+})();
 </script>
+</body>
+</html>

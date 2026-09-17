@@ -104,8 +104,63 @@
   .nav-links a { text-decoration: none; color: var(--muted); border-bottom: 1px solid transparent; padding-bottom: 2px; transition: color .15s ease, border-color .15s ease; }
   .nav-links a:hover { color: var(--heading); border-color: rgba(255,255,255,0.16); }
   .nav-right { display: flex; align-items: center; gap: 0.9rem; }
+  .nav-toggle {
+    display: none;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 5px;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border: 1px solid var(--line-node);
+    border-radius: 8px;
+    background: transparent;
+    cursor: pointer;
+    flex-shrink: 0;
+  }
+  .nav-toggle span {
+    display: block;
+    width: 18px;
+    height: 2px;
+    background: var(--heading);
+    transition: transform .2s ease, opacity .2s ease;
+  }
+  .nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+  .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
   @media (max-width: 760px) {
-    .nav-links { display: none; }
+    .nav-toggle { display: flex; }
+    .nav-links {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      flex-direction: column;
+      align-items: flex-start;
+      gap: 0;
+      padding-inline: 1.5rem;
+      max-height: 0;
+      overflow: hidden;
+      opacity: 0;
+      pointer-events: none;
+      background: rgba(6, 8, 16, 0.99);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--line);
+      transition: max-height .25s ease, opacity .2s ease;
+    }
+    .nav-links.open {
+      max-height: 60vh;
+      opacity: 1;
+      pointer-events: auto;
+    }
+    .nav-links a {
+      width: 100%;
+      padding: 0.9rem 0;
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-links a:last-child { border-bottom: none; }
   }
   @media (max-width: 560px) {
     .nav-right .btn { display: none; }
@@ -365,7 +420,7 @@
     </svg>
       SatsAkademie
     </a>
-    <div class="nav-links">
+    <div class="nav-links" id="nav-links">
       <a href="kursreihe.html">Kursreihe</a>
       <a href="blog.html">Blog</a>
       <a href="news.html" id="nav-news-link">News<span class="nav-dot" id="news-dot" aria-hidden="true"></span></a>
@@ -373,7 +428,10 @@
     </div>
     <div class="nav-right">
       <a class="btn btn-primary" href="kursreihe.html">Kursreihe ansehen</a>
-    </div>
+    <button class="nav-toggle" id="nav-toggle" type="button" aria-label="Menü öffnen" aria-expanded="false" aria-controls="nav-links">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
   </div>
 </nav>
 
@@ -485,5 +543,31 @@
   })();
 </script>
 
+<script>
+(function () {
+  var toggle = document.getElementById('nav-toggle');
+  var links = document.getElementById('nav-links');
+  if (!toggle || !links) return;
+  function closeMenu() {
+    links.classList.remove('open');
+    toggle.setAttribute('aria-expanded', 'false');
+  }
+  toggle.addEventListener('click', function () {
+    var isOpen = links.classList.toggle('open');
+    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
+  });
+  links.querySelectorAll('a').forEach(function (a) {
+    a.addEventListener('click', closeMenu);
+  });
+  document.addEventListener('click', function (e) {
+    if (!links.classList.contains('open')) return;
+    if (links.contains(e.target) || toggle.contains(e.target)) return;
+    closeMenu();
+  });
+  window.addEventListener('resize', function () {
+    if (window.innerWidth > 760) closeMenu();
+  });
+})();
+</script>
 </body>
 </html>

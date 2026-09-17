@@ -177,118 +177,6 @@
   .btn-ghost { border-color: rgba(247, 147, 26, 0.35); background: rgba(247, 147, 26, 0.07); color: var(--accent-soft); }
   .btn-ghost:hover { background: rgba(247, 147, 26, 0.14); border-color: var(--accent); color: var(--heading); }
 
-  /* ---------- nav ---------- */
-  .nav {
-    position: sticky;
-    top: 0;
-    z-index: 40;
-    background: rgba(6, 8, 16, 0.82);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    border-bottom: 1px solid var(--line);
-  }
-  .nav .wrap {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 1.5rem;
-    padding-block: 0.9rem;
-  }
-  .wordmark {
-    font-family: var(--font-mono);
-    font-weight: 500;
-    letter-spacing: 0.05em;
-    font-size: 0.92rem;
-    text-decoration: none;
-    display: inline-flex;
-    align-items: center;
-    gap: 0.6rem;
-    color: var(--heading);
-  }
-  .wordmark svg { width: 26px; height: 26px; flex-shrink: 0; }
-  .nav-links {
-    display: flex;
-    gap: 1.6rem;
-    font-family: var(--font-mono);
-    font-size: 0.78rem;
-    letter-spacing: 0.03em;
-    text-transform: uppercase;
-  }
-  .nav-links a { text-decoration: none; color: var(--muted); border-bottom: 1px solid transparent; padding-bottom: 2px; transition: color .15s ease, border-color .15s ease; }
-  .nav-links a:hover { color: var(--heading); border-color: var(--line-node); }
-  .nav-right { display: flex; align-items: center; gap: 0.9rem; }
-  .badge {
-    font-family: var(--font-mono);
-    font-size: 0.68rem;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    color: var(--muted);
-    border: 1px solid var(--line-node);
-    border-radius: 100px;
-    padding: 0.3rem 0.65rem;
-    white-space: nowrap;
-  }
-  .nav-toggle {
-    display: none;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    gap: 5px;
-    width: 36px;
-    height: 36px;
-    padding: 0;
-    border: 1px solid var(--line-node);
-    border-radius: 8px;
-    background: transparent;
-    cursor: pointer;
-    flex-shrink: 0;
-  }
-  .nav-toggle span {
-    display: block;
-    width: 18px;
-    height: 2px;
-    background: var(--heading);
-    transition: transform .2s ease, opacity .2s ease;
-  }
-  .nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
-  .nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-  @media (max-width: 760px) {
-    .nav-toggle { display: flex; }
-    .nav-links {
-      position: absolute;
-      top: 100%;
-      left: 0;
-      right: 0;
-      flex-direction: column;
-      align-items: flex-start;
-      gap: 0;
-      padding-inline: 1.5rem;
-      max-height: 0;
-      overflow: hidden;
-      opacity: 0;
-      pointer-events: none;
-      background: rgba(6, 8, 16, 0.99);
-      backdrop-filter: blur(16px);
-      -webkit-backdrop-filter: blur(16px);
-      border-bottom: 1px solid var(--line);
-      transition: max-height .25s ease, opacity .2s ease;
-    }
-    .nav-links.open {
-      max-height: 60vh;
-      opacity: 1;
-      pointer-events: auto;
-    }
-    .nav-links a {
-      width: 100%;
-      padding: 0.9rem 0;
-      border-bottom: 1px solid var(--line);
-    }
-    .nav-links a:last-child { border-bottom: none; }
-  }
-  @media (max-width: 560px) {
-    .nav-right .btn { display: none; }
-  }
 
   /* ---------- hero ---------- */
   .hero {
@@ -841,6 +729,7 @@
   }
   .visitor-counter b { color: var(--heading); font-weight: 500; }
 </style>
+<link rel="stylesheet" href="assets/nav.css">
 </head>
 <body>
 
@@ -1144,48 +1033,7 @@
   })();
 </script>
 
-<script>
-  (function () {
-    // Aktuellstes Datum wird dynamisch aus news.html gelesen (data-date-Attribut
-    // am ersten <article class="news-item">) — keine manuelle Pflege nötig.
-    var STORAGE_KEY = "sats_last_seen_news";
-    var dot = document.getElementById("news-dot");
-    var newsLink = document.getElementById("nav-news-link");
-    if (!dot) return;
-
-    function showDotIfNew(latestDate) {
-      if (!latestDate) return;
-      try {
-        var lastSeen = window.localStorage.getItem(STORAGE_KEY);
-        if (!lastSeen || lastSeen < latestDate) {
-          dot.classList.add("is-visible");
-        }
-      } catch (e) {
-        // localStorage nicht verfügbar (z. B. privates Fenster) — Punkt einfach nicht anzeigen.
-      }
-      if (newsLink) {
-        newsLink.addEventListener("click", function () {
-          try { window.localStorage.setItem(STORAGE_KEY, latestDate); } catch (e) {}
-        });
-      }
-    }
-
-    try {
-      fetch("news.html")
-        .then(function (res) { return res.ok ? res.text() : null; })
-        .then(function (html) {
-          if (!html) return;
-          var match = html.match(/class="news-item"\s+data-date="(\d{4}-\d{2}-\d{2})"/);
-          if (match) showDotIfNew(match[1]);
-        })
-        .catch(function () {
-          // Cross-Origin (z. B. Artifact-Vorschau) oder Netzwerkfehler — Punkt bleibt einfach aus.
-        });
-    } catch (e) {
-      // fetch nicht verfügbar — Punkt bleibt einfach aus.
-    }
-  })();
-</script>
+<script src="assets/nav.js"></script>
 
 <script>
   (function () {
@@ -1244,31 +1092,5 @@
      "Web Analytics" im Vercel-Projekt-Dashboard aktiviert wurde. -->
 <script defer src="/_vercel/insights/script.js"></script>
 
-<script>
-(function () {
-  var toggle = document.getElementById('nav-toggle');
-  var links = document.getElementById('nav-links');
-  if (!toggle || !links) return;
-  function closeMenu() {
-    links.classList.remove('open');
-    toggle.setAttribute('aria-expanded', 'false');
-  }
-  toggle.addEventListener('click', function () {
-    var isOpen = links.classList.toggle('open');
-    toggle.setAttribute('aria-expanded', isOpen ? 'true' : 'false');
-  });
-  links.querySelectorAll('a').forEach(function (a) {
-    a.addEventListener('click', closeMenu);
-  });
-  document.addEventListener('click', function (e) {
-    if (!links.classList.contains('open')) return;
-    if (links.contains(e.target) || toggle.contains(e.target)) return;
-    closeMenu();
-  });
-  window.addEventListener('resize', function () {
-    if (window.innerWidth > 760) closeMenu();
-  });
-})();
-</script>
 </body>
 </html>

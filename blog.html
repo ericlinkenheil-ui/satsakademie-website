@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Impressum von SatsAkademie.">
-<title>Impressum – SatsAkademie</title>
+<meta name="description" content="Blog von SatsAkademie – Updates, Denkanstöße und Blicke hinter die Kulissen, während Website und Kursreihe entstehen.">
+<title>Blog – SatsAkademie</title>
 <style>
   :root{
     --bg-1:#131a2c;
@@ -16,6 +16,8 @@
     --body:#b9c2d6;
     --muted:#8b93ab;
     --line:rgba(255,255,255,0.09);
+    --line-node:rgba(255,255,255,0.16);
+    --card-bg:rgba(255,255,255,0.03);
     --focus:#ffcf8c;
   }
 
@@ -37,7 +39,7 @@
   }
 
   .wrap{
-    max-width:640px;
+    max-width:760px;
     margin:0 auto;
     padding:64px 24px 80px;
   }
@@ -127,61 +129,151 @@
   }
 
 
-  h1{
+  .eyebrow{
     margin-top:44px;
-    font-family:"IBM Plex Serif", ui-serif, Georgia, serif;
-    font-weight:700;
-    font-size:clamp(30px, 5vw, 42px);
-    letter-spacing:-0.5px;
-    color:var(--heading);
-  }
-
-  h2{
-    margin-top:38px;
     font-family:"IBM Plex Mono", ui-monospace, monospace;
-    font-size:13px;
-    font-weight:500;
-    letter-spacing:1.5px;
+    font-size:0.72rem;
+    letter-spacing:0.12em;
     text-transform:uppercase;
     color:var(--accent-soft);
   }
 
-  p, address{
+  h1{
     margin-top:14px;
-    font-style:normal;
-    font-size:16px;
+    font-family:"IBM Plex Serif", ui-serif, Georgia, serif;
+    font-weight:700;
+    font-size:clamp(32px, 5vw, 46px);
+    letter-spacing:-0.5px;
+    color:var(--heading);
+  }
+
+  .lede{
+    margin-top:18px;
+    font-size:17px;
     line-height:1.65;
+    max-width:58ch;
     color:var(--body);
   }
 
-  a.inline{
-    color:var(--accent-soft);
-    text-decoration:none;
-    border-bottom:1px solid rgba(255,177,78,0.4);
-    padding-bottom:1px;
-    transition:border-color .15s ease, color .15s ease;
-  }
-
-  a.inline:hover{
-    color:var(--heading);
-    border-color:var(--heading);
-  }
-
-  .note{
-    margin-top:56px;
-    padding:20px 22px;
-    border-radius:16px;
+  .posts{
+    margin-top:48px;
+    display:flex;
+    flex-direction:column;
+    gap:1px;
+    background:var(--line);
     border:1px solid var(--line);
-    background:rgba(255,255,255,0.02);
+    border-radius:16px;
+    overflow:hidden;
+  }
+
+  .post-card{
+    background:var(--bg-2);
+    padding:28px;
+    text-decoration:none;
+    display:block;
+    transition:background .15s ease;
+  }
+  .post-card:hover{ background:rgba(255,255,255,0.035); }
+
+  .post-date{
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:12px;
+    letter-spacing:0.06em;
+    text-transform:uppercase;
+    color:var(--muted);
+  }
+
+  .post-title{
+    margin-top:10px;
+    font-family:"IBM Plex Serif", ui-serif, Georgia, serif;
+    font-weight:600;
+    font-size:22px;
+    color:var(--heading);
+  }
+
+  .post-excerpt{
+    margin-top:10px;
+    font-size:15px;
+    line-height:1.6;
+    color:var(--body);
+    max-width:62ch;
+  }
+
+  .post-more{
+    margin-top:14px;
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:12px;
+    letter-spacing:0.04em;
+    text-transform:uppercase;
+    color:var(--accent-soft);
+  }
+
+  .empty-note{
+    margin-top:18px;
+    padding:18px 20px;
+    border-radius:14px;
+    border:1px dashed var(--line-node);
     font-size:14px;
     line-height:1.6;
     color:var(--muted);
   }
 
-  hr{
-    margin-top:44px;
-    border:none;
+  footer{
+    margin-top:56px;
+    padding-top:24px;
     border-top:1px solid var(--line);
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:10px;
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:11px;
+    letter-spacing:0.4px;
+    color:var(--muted);
+  }
+
+  .legal-link{
+    color:var(--muted);
+    text-decoration:none;
+    border-bottom:1px solid transparent;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .legal-link:hover{ color:var(--body); border-color:var(--muted); }
+
+  .disclaimer{
+    flex-basis:100%;
+    max-width:640px;
+    font-size:10.5px;
+    line-height:1.5;
+    letter-spacing:0.2px;
+    opacity:0.75;
+  }
+
+  .tabs{
+    margin-top:32px;
+    display:flex;
+    gap:10px;
+  }
+  .tab{
+    padding:8px 16px;
+    border-radius:999px;
+    border:1px solid var(--line);
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:12px;
+    letter-spacing:0.05em;
+    text-transform:uppercase;
+    color:var(--muted);
+    text-decoration:none;
+    transition:color .15s ease, border-color .15s ease, background .15s ease;
+  }
+  .tab:hover{ color:var(--body); border-color:var(--line-node); }
+  .tab.active{
+    border-color:rgba(247,147,26,0.5);
+    background:rgba(247,147,26,0.1);
+    color:var(--accent-soft);
   }
 </style>
 
@@ -286,26 +378,36 @@
 </nav>
 
 <div class="wrap">
-  <h1>Impressum</h1>
-
-  <h2>Angaben gemäß § 5 DDG</h2>
-  <address>
-    Eric Linkenheil<br>
-    Karlsbader Straße 19<br>
-    08309 Eibenstock
-  </address>
-
-  <h2>Kontakt</h2>
-  <p>E-Mail: <a class="inline" href="mailto:kontakt@satsakademie.de">kontakt@satsakademie.de</a></p>
-
-  <h2>Verantwortlich für den Inhalt</h2>
-  <p>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV: Eric Linkenheil (Anschrift wie oben).</p>
-
-  <hr>
-
-  <div class="note">
-    SatsAkademie befindet sich im Aufbau und wird derzeit als Einzelperson vorbereitet, es besteht noch kein eingetragenes Gewerbe. Sobald der Kursverkauf startet, werden die hier genannten Angaben um die dann erforderlichen Informationen ergänzt.
+  <div class="tabs">
+    <a class="tab active" href="blog.html">Blog</a>
+    <a class="tab" href="news.html">News</a>
   </div>
+
+  <p class="eyebrow">Aus der Werkstatt</p>
+  <h1>Blog</h1>
+  <p class="lede">Tiefere Beiträge, wenn es etwas Substanzielles zu erzählen gibt – Troubleshooting aus dem eigenen Node-Aufbau, Hintergründe und Entscheidungen rund um Website und Kursreihe. Kein festes Datum, dafür Substanz. Für die tägliche Kurzeinordnung aktueller Bitcoin-News gibt es die <a class="legal-link" href="news.html" style="color:var(--accent-soft); border-color:rgba(255,177,78,0.4);">News</a>.</p>
+
+  <div class="posts">
+    <a class="post-card" href="blog-doppelt-flashen-raspiblitz.html">
+      <div class="post-date">09. September 2026</div>
+      <div class="post-title">Warum du beim RaspiBlitz-Setup manchmal zweimal flashen musst</div>
+      <p class="post-excerpt">Beim Einbau einer brandneuen Ersatz-Festplatte tauchte derselbe Fehler wieder auf wie beim allerersten Setup – und verlangte erneut einen Neuflash der SD-Karte. Kein Zufall, wie ein offenes GitHub-Issue zeigt.</p>
+      <div class="post-more">Weiterlesen →</div>
+    </a>
+  </div>
+
+  <div class="empty-note">Neue Beiträge folgen laufend – am einfachsten nichts verpassen über <a class="legal-link" href="https://instagram.com/satsakademie" target="_blank" rel="noopener" style="color:var(--accent-soft); border-color:rgba(255,177,78,0.4);">@satsakademie auf Instagram</a> oder <a class="legal-link" href="https://x.com/SatsAkademie" target="_blank" rel="noopener" style="color:var(--accent-soft); border-color:rgba(255,177,78,0.4);">@SatsAkademie auf X</a>.</div>
+
+  <footer>
+    <span>
+      <a class="legal-link" href="kursreihe.html">Kursreihe</a>
+      · <a class="legal-link" href="news.html">News</a>
+      · <a class="legal-link" href="impressum.html">Impressum</a>
+      · <a class="legal-link" href="datenschutz.html">Datenschutz</a>
+    </span>
+    <span>© 2026 SatsAkademie</span>
+    <p class="disclaimer">Alle Inhalte dienen ausschließlich der technischen und pädagogischen Bildung und stellen keine Finanz-, Anlage- oder Steuerberatung dar.</p>
+  </footer>
 </div>
 
 <script>

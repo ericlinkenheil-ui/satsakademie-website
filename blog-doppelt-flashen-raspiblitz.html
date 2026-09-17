@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Impressum von SatsAkademie.">
-<title>Impressum – SatsAkademie</title>
+<meta name="description" content="Warum der RaspiBlitz-Setup-Assistent manchmal einen erzwungenen Neuflash der SD-Karte verlangt, obwohl nichts kaputt ist – inklusive eines offenen GitHub-Issues, das zeigt, dass es kein Einzelfall ist.">
+<title>Zweimal flashen beim RaspiBlitz – SatsAkademie Blog</title>
 <style>
   :root{
     --bg-1:#131a2c;
@@ -37,7 +37,7 @@
   }
 
   .wrap{
-    max-width:640px;
+    max-width:680px;
     margin:0 auto;
     padding:64px 24px 80px;
   }
@@ -127,61 +127,162 @@
   }
 
 
-  h1{
+  .eyebrow{
     margin-top:44px;
-    font-family:"IBM Plex Serif", ui-serif, Georgia, serif;
-    font-weight:700;
-    font-size:clamp(30px, 5vw, 42px);
-    letter-spacing:-0.5px;
-    color:var(--heading);
-  }
-
-  h2{
-    margin-top:38px;
     font-family:"IBM Plex Mono", ui-monospace, monospace;
-    font-size:13px;
-    font-weight:500;
-    letter-spacing:1.5px;
+    font-size:0.72rem;
+    letter-spacing:0.1em;
     text-transform:uppercase;
     color:var(--accent-soft);
   }
 
-  p, address{
+  h1{
     margin-top:14px;
-    font-style:normal;
-    font-size:16px;
-    line-height:1.65;
+    font-family:"IBM Plex Serif", ui-serif, Georgia, serif;
+    font-weight:700;
+    font-size:clamp(28px, 5vw, 40px);
+    letter-spacing:-0.5px;
+    line-height:1.18;
+    color:var(--heading);
+  }
+
+  .dek{
+    margin-top:18px;
+    font-size:17px;
+    line-height:1.6;
     color:var(--body);
   }
 
-  a.inline{
+  article p{
+    margin-top:20px;
+    font-size:17px;
+    line-height:1.75;
+    color:var(--body);
+  }
+  article p:first-of-type{ margin-top:36px; }
+  article strong{ color:var(--heading); font-weight:600; }
+
+  h2{
+    margin-top:40px;
+    font-family:"IBM Plex Serif", ui-serif, Georgia, serif;
+    font-weight:600;
+    font-size:21px;
+    color:var(--heading);
+  }
+
+  .callout{
+    margin-top:24px;
+    padding:18px 20px;
+    border-radius:14px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.03);
+    font-size:15px;
+    line-height:1.65;
+    color:var(--body);
+  }
+  .callout b{ color:var(--accent-soft); font-weight:600; }
+
+  .warn{
+    margin-top:24px;
+    padding:18px 20px;
+    border-radius:14px;
+    border:1px solid rgba(239,68,68,0.35);
+    background:rgba(239,68,68,0.06);
+    font-size:15px;
+    line-height:1.65;
+    color:var(--body);
+  }
+  .warn b{ color:#ffb4b0; font-weight:600; }
+
+  code{
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:0.88em;
+    background:rgba(255,255,255,0.06);
+    padding:0.15em 0.4em;
+    border-radius:4px;
+    color:var(--accent-soft);
+  }
+
+  pre{
+    margin-top:18px;
+    padding:16px 18px;
+    border-radius:12px;
+    border:1px solid var(--line);
+    background:var(--bg-3);
+    overflow-x:auto;
+  }
+  pre code{
+    background:none;
+    padding:0;
+    color:var(--heading);
+    font-size:13.5px;
+    line-height:1.6;
+  }
+
+  article a.inline{
     color:var(--accent-soft);
     text-decoration:none;
     border-bottom:1px solid rgba(255,177,78,0.4);
     padding-bottom:1px;
     transition:border-color .15s ease, color .15s ease;
   }
+  article a.inline:hover{ color:var(--heading); border-color:var(--heading); }
 
-  a.inline:hover{
-    color:var(--heading);
-    border-color:var(--heading);
-  }
-
-  .note{
-    margin-top:56px;
-    padding:20px 22px;
+  .cta{
+    margin-top:44px;
+    padding:24px;
     border-radius:16px;
-    border:1px solid var(--line);
-    background:rgba(255,255,255,0.02);
-    font-size:14px;
-    line-height:1.6;
+    border:1px solid rgba(247,147,26,0.35);
+    background:rgba(247,147,26,0.06);
+  }
+  .cta p{ margin-top:0; font-size:15px; line-height:1.6; color:var(--body); }
+  .cta .row{ margin-top:16px; display:flex; flex-wrap:wrap; gap:12px; }
+  .cta a{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 18px;
+    border-radius:999px;
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:13px;
+    font-weight:500;
+    letter-spacing:0.3px;
+    text-decoration:none;
+    border:1px solid rgba(247,147,26,0.5);
+    color:var(--accent-soft);
+    transition:background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .cta a:hover{ background:rgba(247,147,26,0.15); border-color:var(--accent); color:var(--heading); }
+  .cta svg{ width:16px; height:16px; flex-shrink:0; }
+
+  hr{ margin-top:56px; border:none; border-top:1px solid var(--line); }
+
+  footer{
+    margin-top:24px;
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:space-between;
+    gap:10px;
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:11px;
+    letter-spacing:0.4px;
     color:var(--muted);
   }
+  .legal-link{
+    color:var(--muted);
+    text-decoration:none;
+    border-bottom:1px solid transparent;
+    transition:color .15s ease, border-color .15s ease;
+  }
+  .legal-link:hover{ color:var(--body); border-color:var(--muted); }
 
-  hr{
-    margin-top:44px;
-    border:none;
-    border-top:1px solid var(--line);
+  .disclaimer{
+    flex-basis:100%;
+    max-width:640px;
+    font-size:10.5px;
+    line-height:1.5;
+    letter-spacing:0.2px;
+    opacity:0.75;
   }
 </style>
 
@@ -286,26 +387,76 @@
 </nav>
 
 <div class="wrap">
-  <h1>Impressum</h1>
+  <p class="eyebrow">09. September 2026</p>
+  <h1>Warum du beim RaspiBlitz-Setup manchmal zweimal flashen musst</h1>
+  <p class="dek">Kein Absturz einer laufenden Node – sondern ein Fehlerbild direkt beim Setup, das sich beim zweiten Mal wiederholt hat. Diesmal mit einer brandneuen Festplatte. Und einem offenen GitHub-Issue, das zeigt: kein Einzelfall.</p>
 
-  <h2>Angaben gemäß § 5 DDG</h2>
-  <address>
-    Eric Linkenheil<br>
-    Karlsbader Straße 19<br>
-    08309 Eibenstock
-  </address>
+  <article>
+    <p>Die ursprüngliche SSD in meiner Node hatte defekte Sektoren und musste raus. Ersatz: eine brandneue, nie zuvor benutzte SanDisk Ultra 3D. Neue Platte eingebaut, RaspiBlitz-Setup-Assistent gestartet, Schritt „Prepare Drive" – und genau dort stand plötzlich wieder dieselbe Fehlermeldung am Display, die ich schon vom allerersten Setup kannte. Nicht mitten im Betrieb, nicht nachdem irgendetwas schon lief: direkt beim Einrichten der neuen Platte, bevor überhaupt irgendetwas synchronisiert werden konnte.</p>
 
-  <h2>Kontakt</h2>
-  <p>E-Mail: <a class="inline" href="mailto:kontakt@satsakademie.de">kontakt@satsakademie.de</a></p>
+    <h2>Der eigentliche Auslöser: das Datenlaufwerk wird nicht erkannt</h2>
+    <p>Die Fehlermeldung im Assistenten:</p>
+    <pre><code>error='storagePartition not detected'
+FAIL: blitz.data.sh mount failed
+ERROR - please report to development team</code></pre>
+    <p>Die Ursache: Die externe SSD hat weder Partitionsschema noch Dateisystem – roh ab Werk. RaspiBlitz erwartet eine selbst angelegte Partition und bricht in diesem Fall bewusst hart ab, statt automatisch zu formatieren.</p>
 
-  <h2>Verantwortlich für den Inhalt</h2>
-  <p>Verantwortlich für den Inhalt nach § 18 Abs. 2 MStV: Eric Linkenheil (Anschrift wie oben).</p>
+    <p><strong>Der schnellste erste Versuch, bevor es technischer wird:</strong> Es gibt begründeten Verdacht auf ein reines Timing-Problem bei der USB-Erkennung direkt nach dem Boot. Lohnt sich also erst mal, im Assistenten die Seite neu zu laden und den „Prepare Drive"-Schritt (inklusive „Ja, alle Daten löschen") einfach noch einmal zu versuchen – das löst den Fehler manchmal schon ganz ohne manuellen Eingriff auf.</p>
+
+    <p>Hat das nicht geholfen, geht es per SSH weiter. Diagnose zuerst: <code>lsblk -o NAME,SIZE,TYPE,FSTYPE,MOUNTPOINT</code> – zeigt das Laufwerk keinen Eintrag unter <code>FSTYPE</code> und keine Kind-Partitionen, ist es tatsächlich unformatiert. Der Fix läuft danach manuell:</p>
+    <pre><code>sudo /home/admin/config.scripts/blitz.data.sh setup STORAGE sda 0</code></pre>
+    <p>Wichtig dabei: Der Skriptname ist <strong>versionsabhängig</strong>. Ab RaspiBlitz-Version 1.12 heißt er <code>blitz.data.sh</code>, bis Version 1.11 <code>blitz.datadrive.sh</code>. Mit <code>ls -la /home/admin/config.scripts/ | grep -i data</code> lässt sich das vorher prüfen, statt zu raten. Danach mounten: <code>sudo /home/admin/config.scripts/blitz.data.sh mount</code> – „Already mounted: /mnt/disk_storage" bestätigt den Erfolg.</p>
+
+    <div class="warn"><b>Vorsicht:</b> Der Setup-Befehl führt <code>sfdisk --delete</code>, <code>wipefs -a</code> und <code>parted mklabel gpt</code> aus – das löscht alle vorhandenen Daten auf dem Laufwerk unwiderruflich. Vorher per <code>lsblk</code> wirklich sicherstellen, dass Größe und Name zum richtigen, leeren Laufwerk passen.</div>
+
+    <h2>Und genau das erzwingt den zweiten Flash</h2>
+    <p>Weil dieser Befehl manuell außerhalb des regulären Setup-Assistenten läuft, passt der interne Zustand auf der SD-Karte danach nicht mehr zum erwarteten Ablauf. RaspiBlitz erkennt das über einen eingebauten Sicherheitscheck und verlangt genau deshalb: <code>PLEASE START WITH A FRESH SD CARD IMAGE</code>. Kein Fehlschlag, sondern bewusstes Sicherheitsdesign – RaspiBlitz repariert einen inkonsistenten Zustand nicht, sondern verlangt einen sauberen Neustart. Die gute Nachricht: Die externe Festplatte bleibt dabei angeschlossen. Du flashst nur die SD-Karte neu (Image von <a class="inline" href="https://github.com/raspiblitz/raspiblitz/releases" target="_blank" rel="noopener">github.com/raspiblitz/raspiblitz/releases</a>), und der Setup-Assistent erkennt die bereits vorbereitete Partition beim nächsten Durchlauf automatisch über seine Recover-Funktion – ohne sie erneut zu formatieren. Genau das macht den zweiten Durchlauf beim zweiten Mal auch so viel schneller: Das Muster war schon bekannt.</p>
+
+    <h2>Kein Einzelfall: ein offenes GitHub-Issue bestätigt das Muster</h2>
+    <p>Was diesen Fall besonders macht: Eine nagelneue, nie zuvor benutzte Platte mit demselben Symptom ist ein starkes Indiz, dass es nicht an der Festplatte liegt. Tatsächlich gibt es dazu ein offenes, bislang unbestätigtes Issue im RaspiBlitz-Repository (<a class="inline" href="https://github.com/raspiblitz/raspiblitz/issues/5158" target="_blank" rel="noopener">GitHub #5158</a>), das exakt dasselbe Symptom bei anderen Nutzern mit brandneuer Hardware beschreibt.</p>
+    <div class="callout">Heißt für dich ganz praktisch: Wenn du auf dieses Fehlerbild triffst, geh nicht vorschnell davon aus, dass deine Platte defekt ist. Es sieht eher nach einer Eigenheit im Setup-Assistenten selbst aus – nicht nach deinem Fehler.</div>
+
+    <h2>Woran du wirklich erkennst, dass es geklappt hat</h2>
+    <p>Nach dem Reflash zeigen weder das LCD-Display noch die Web-Oberfläche zuverlässig an, ob das Laufwerk tatsächlich korrekt eingebunden ist – es erscheint einfach derselbe generische „ready for setup"-Bildschirm, unabhängig vom tatsächlichen Mount-Zustand. Verlässliche Gewissheit gibt es nur per SSH:</p>
+    <pre><code>df -h
+bitcoin-cli getblockchaininfo</code></pre>
+    <p><code>df -h</code> zeigt, ob das Laufwerk tatsächlich unter <code>/mnt/disk_storage</code> mit der erwarteten Größe eingehängt ist. Ein zweiter Aufruf von <code>bitcoin-cli getblockchaininfo</code> im Abstand einiger Minuten zeigt, ob <code>blocks</code> und <code>headers</code> tatsächlich steigen – dann läuft die Synchronisation wirklich.</p>
+
+    <p>Genau solche Stellen – dort, wo die offizielle Doku aufhört und die Praxis anfängt – sind der Grund, warum Modul 4 der Kursreihe (Full Node auf dem Raspberry Pi 5) nicht nur die Schritte zeigt, die glatt laufen, sondern auch die, die es nicht tun. Mit Screenshots vom eigenen Fehlerbild, nicht nachgestellt.</p>
+
+    <div class="cta">
+      <p>Willst du benachrichtigt werden, sobald Modul 4 startet?</p>
+      <div class="row">
+        <a href="mailto:kontakt@satsakademie.de?subject=Vorab-Info%20Modul%204">kontakt@satsakademie.de</a>
+        <a href="https://instagram.com/satsakademie" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5.5" stroke="currentColor" stroke-width="1.8"/>
+            <circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.8"/>
+            <circle cx="17.3" cy="6.7" r="1.15" fill="currentColor"/>
+          </svg>
+          @satsakademie
+        </a>
+        <a href="https://x.com/SatsAkademie" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+          @SatsAkademie
+        </a>
+      </div>
+    </div>
+  </article>
 
   <hr>
 
-  <div class="note">
-    SatsAkademie befindet sich im Aufbau und wird derzeit als Einzelperson vorbereitet, es besteht noch kein eingetragenes Gewerbe. Sobald der Kursverkauf startet, werden die hier genannten Angaben um die dann erforderlichen Informationen ergänzt.
-  </div>
+  <footer>
+    <span>
+      <a class="legal-link" href="kursreihe.html">Kursreihe</a>
+      · <a class="legal-link" href="impressum.html">Impressum</a>
+      · <a class="legal-link" href="datenschutz.html">Datenschutz</a>
+    </span>
+    <span>© 2026 SatsAkademie</span>
+    <p class="disclaimer">Alle Inhalte dienen ausschließlich der technischen und pädagogischen Bildung und stellen keine Finanz-, Anlage- oder Steuerberatung dar.</p>
+  </footer>
 </div>
 
 <script>

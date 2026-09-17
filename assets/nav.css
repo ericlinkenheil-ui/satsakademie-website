@@ -1,0 +1,124 @@
+/* ---------- SatsAkademie: gemeinsame Navigation ----------
+   Eingebunden auf allen 7 Seiten (index/satsakademie-website, kursreihe, blog,
+   blog-doppelt-flashen-raspiblitz, news, impressum, datenschutz) via
+   <link rel="stylesheet" href="assets/nav.css">.
+   Erwartet die Standard-Marken-Variablen im :root der jeweiligen Seite
+   (--line, --line-node, --heading, --muted, --accent, --accent-soft) und nutzt
+   var()-Fallbacks für --font-mono, damit auch Seiten ohne diese Variable
+   korrekt gerendert werden.
+   Stand: 17.09.2026 (ausgelagert aus den 7 einzelnen Seiten, siehe
+   knotenpunkt-website-fahrplan.md, Abschnitt "Arbeitsweise für künftige
+   Website-Änderungen"). Künftige Kopf-Änderungen bitte NUR hier vornehmen,
+   nicht mehr in den einzelnen Seiten. */
+
+.nav {
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: rgba(6, 8, 16, 0.82);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--line);
+}
+.nav .wrap {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1.5rem;
+  padding-block: 0.9rem;
+}
+.wordmark {
+  font-family: var(--font-mono, "IBM Plex Mono", ui-monospace, monospace);
+  font-weight: 500;
+  letter-spacing: 0.05em;
+  font-size: 0.92rem;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6rem;
+  color: var(--heading);
+}
+.wordmark svg { width: 26px; height: 26px; flex-shrink: 0; }
+.nav-links {
+  display: flex;
+  gap: 1.6rem;
+  font-family: var(--font-mono, "IBM Plex Mono", ui-monospace, monospace);
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  text-transform: uppercase;
+}
+.nav-links a { text-decoration: none; color: var(--muted); border-bottom: 1px solid transparent; padding-bottom: 2px; transition: color .15s ease, border-color .15s ease; }
+.nav-links a:hover { color: var(--heading); border-color: var(--line-node, rgba(255, 255, 255, 0.16)); }
+.nav-right { display: flex; align-items: center; gap: 0.9rem; }
+.badge {
+  font-family: var(--font-mono, "IBM Plex Mono", ui-monospace, monospace);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  border: 1px solid var(--line-node, rgba(255, 255, 255, 0.16));
+  border-radius: 100px;
+  padding: 0.3rem 0.65rem;
+  white-space: nowrap;
+}
+.nav-toggle {
+  display: none;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+  width: 36px;
+  height: 36px;
+  padding: 0;
+  border: 1px solid var(--line-node, rgba(255, 255, 255, 0.16));
+  border-radius: 8px;
+  background: transparent;
+  cursor: pointer;
+  flex-shrink: 0;
+}
+.nav-toggle span {
+  display: block;
+  width: 18px;
+  height: 2px;
+  background: var(--heading);
+  transition: transform .2s ease, opacity .2s ease;
+}
+.nav-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+.nav-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+.nav-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+@media (max-width: 760px) {
+  .nav-toggle { display: flex; }
+  .nav-links {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0;
+    padding-inline: 1.5rem;
+    max-height: 0;
+    overflow: hidden;
+    opacity: 0;
+    pointer-events: none;
+    background: rgba(6, 8, 16, 0.99);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border-bottom: 1px solid var(--line);
+    transition: max-height .25s ease, opacity .2s ease;
+  }
+  .nav-links.open {
+    max-height: 60vh;
+    opacity: 1;
+    pointer-events: auto;
+  }
+  .nav-links a {
+    width: 100%;
+    padding: 0.9rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .nav-links a:last-child { border-bottom: none; }
+}
+@media (max-width: 560px) {
+  .nav-right .btn { display: none; }
+}

@@ -882,7 +882,7 @@
       <div class="btc-stat" id="btc-hashrate-wrap">
         <span class="eyebrow">Netzwerk-Hashrate</span>
         <div class="btc-stat-value" id="btc-hashrate-value">–</div>
-        <div class="btc-stat-sub">geschätzte Rechenleistung (Ø 1 Monat)</div>
+        <div class="btc-stat-sub">geschätzte Rechenleistung des Netzwerks</div>
       </div>
     </div>
   </div>
@@ -911,7 +911,7 @@
 
     <p class="btc-source-note">
       Quellen: <a href="https://www.coingecko.com/" target="_blank" rel="noopener">CoinGecko</a> (Kurs &amp; Verlauf) ·
-      <a href="https://mempool.space/" target="_blank" rel="noopener">mempool.space</a> (Gebühren, Difficulty, Blockhöhe, Hashrate; Gebühren/Blockhöhe mit Fallback über <a href="https://blockstream.info/" target="_blank" rel="noopener">blockstream.info</a>) ·
+      <a href="https://mempool.space/" target="_blank" rel="noopener">mempool.space</a> (Gebühren, Difficulty, Blockhöhe, Hashrate; mit Fallback über <a href="https://blockstream.info/" target="_blank" rel="noopener">blockstream.info</a> bzw. <a href="https://www.blockchain.com/explorer" target="_blank" rel="noopener">blockchain.info</a>) ·
       <a href="https://alternative.me/crypto/fear-and-greed-index/" target="_blank" rel="noopener">alternative.me</a> (Fear &amp; Greed Index). Der Halving-Countdown ist eine rechnerische Schätzung auf Basis der aktuellen Blockhöhe (Ø 10 Minuten pro Block) und kein exaktes Datum.
       Alle Angaben ohne Gewähr und keine Finanz- oder Anlageberatung.
     </p>
@@ -1193,13 +1193,17 @@
         document.getElementById("btc-diff-bar").style.width = percent.toFixed(1) + "%";
         document.getElementById("btc-diff-percent").textContent = percent.toFixed(1).replace(".", ",") + " % geschafft";
         document.getElementById("btc-diff-remaining").textContent = SatsLive.formatNumber(d.remainingBlocks) + " Blöcke verbleiben";
-        var change = d.difficultyChange || 0;
         var changeEl = document.getElementById("btc-diff-change");
-        changeEl.textContent = "Erwartete Änderung: " + SatsLive.formatPercent(change);
-        changeEl.style.color = change >= 0 ? "#6fd88a" : "#f2665c";
+        if (typeof d.difficultyChange === "number") {
+          changeEl.textContent = "Erwartete Änderung: " + SatsLive.formatPercent(d.difficultyChange);
+          changeEl.style.color = d.difficultyChange >= 0 ? "#6fd88a" : "#f2665c";
+        } else {
+          changeEl.textContent = "Erwartete Änderung: nur über mempool.space verfügbar";
+          changeEl.style.color = "";
+        }
         if (d.estimatedRetargetDate) {
           var etaDate = new Date(d.estimatedRetargetDate);
-          document.getElementById("btc-diff-eta").textContent = "vsl. " + etaDate.toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" });
+          document.getElementById("btc-diff-eta").textContent = (d.estimated ? "geschätzt " : "vsl. ") + etaDate.toLocaleDateString("de-DE", { day: "2-digit", month: "2-digit", year: "numeric" });
         }
       }).catch(function () {
         showError("btc-diff-wrap", "Difficulty-Daten sind gerade nicht erreichbar. Bitte später erneut versuchen.");

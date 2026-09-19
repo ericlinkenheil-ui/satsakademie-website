@@ -807,43 +807,23 @@
   </div>
 </nav>
 
-<section id="bitcoin-live" class="btc-section" style="padding-block: clamp(2.6rem, 6vw, 4rem) clamp(3rem, 7vw, 5rem);">
+<section id="bitcoin-live" class="btc-mini-section">
   <div class="wrap">
-    <span class="eyebrow">Live-Daten</span>
-    <h2 style="font-family: var(--font-display); font-weight: 700; font-size: clamp(1.6rem, 3.5vw, 2.3rem); color: var(--heading); margin-top: 0.5rem;">Der Bitcoin-Kurs, gerade jetzt</h2>
-    <p class="lede">Direkt aus dem Markt, automatisch aktuell – keine Anmeldung, keine Umwege. Noch mehr Live-Zahlen (Netzwerk-Gebühren, Difficulty, Hashrate, Halving-Countdown u. v. m.) findest du unter <a href="bitcoin-live-infos.html" style="color: var(--accent-soft); text-decoration: underline;">Bitcoin Live Infos</a>.</p>
-
-    <div class="btc-card btc-ticker-card">
-      <div>
-        <div class="btc-live-badge"><span class="btc-live-dot"></span> Live · aktualisiert automatisch</div>
-        <div class="btc-price-row">
+    <div class="btc-mini-card">
+      <div class="btc-mini-head">
+        <div class="btc-mini-label"><span class="btc-live-dot"></span> Bitcoin-Kurs · Live</div>
+        <div class="btc-mini-price">
           <span class="btc-price is-loading" id="btc-home-price">wird geladen …</span>
           <span class="btc-change" id="btc-home-change"></span>
         </div>
-        <div class="btc-updated" id="btc-home-updated"></div>
+        <a class="btc-mini-link" href="bitcoin-live-infos.html">Alle Live-Infos ansehen →</a>
       </div>
-      <div class="btc-toggle-group" id="btc-home-currency-toggle" role="group" aria-label="Währung wählen">
-        <button type="button" data-currency="eur">EUR</button>
-        <button type="button" data-currency="usd">USD</button>
-      </div>
-    </div>
-
-    <div class="btc-card btc-chart-card">
-      <div class="btc-controls">
-        <div class="btc-toggle-group" id="btc-home-range-toggle" role="group" aria-label="Zeitraum wählen">
-          <button type="button" data-days="1">24H</button>
-          <button type="button" data-days="7">7T</button>
-          <button type="button" data-days="30">30T</button>
-          <button type="button" data-days="365">1J</button>
-        </div>
-        <a class="btn btn-ghost" href="bitcoin-live-infos.html">Alle Live-Infos ansehen →</a>
-      </div>
-      <div class="btc-chart-wrap">
+      <div class="btc-chart-wrap btc-chart-wrap--mini">
         <canvas id="btc-home-chart" role="img" aria-label="Bitcoin-Kursverlauf-Chart"></canvas>
         <div class="btc-chart-status" id="btc-home-chart-status"></div>
       </div>
+      <p class="btc-source-note">Kursdaten: <a href="https://www.coingecko.com/" target="_blank" rel="noopener">CoinGecko</a>. Keine Anlageberatung.</p>
     </div>
-    <p class="btc-source-note">Kursdaten: <a href="https://www.coingecko.com/" target="_blank" rel="noopener">CoinGecko</a>. Keine Anlageberatung.</p>
   </div>
 </section>
 
@@ -1105,9 +1085,6 @@
     SatsLive.mountPriceChart({
       priceEl: document.getElementById("btc-home-price"),
       changeEl: document.getElementById("btc-home-change"),
-      updatedEl: document.getElementById("btc-home-updated"),
-      currencyButtons: document.querySelectorAll("#btc-home-currency-toggle button"),
-      rangeButtons: document.querySelectorAll("#btc-home-range-toggle button"),
       canvas: document.getElementById("btc-home-chart"),
       chartStatusEl: document.getElementById("btc-home-chart-status"),
       defaultCurrency: "eur",

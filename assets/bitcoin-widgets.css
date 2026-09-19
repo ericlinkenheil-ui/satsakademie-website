@@ -1,0 +1,240 @@
+/* ---------- SatsAkademie: Bitcoin-Live-Widgets (gemeinsames Design) ----------
+   Eingebunden auf der Startseite (Chart-Widget) und auf bitcoin-live-infos.html
+   via <link rel="stylesheet" href="assets/bitcoin-widgets.css">.
+   Erwartet die Standard-Marken-Variablen im :root der jeweiligen Seite und
+   nutzt var()-Fallbacks für --font-mono/--font-display/--on-accent/--line-node,
+   damit die Widgets auch auf "leichten" Unterseiten korrekt aussehen.
+   Stand: 19.09.2026 (siehe knotenpunkt-website-fahrplan.md, Abschnitt
+   "Bitcoin Live Infos"). */
+
+.btc-section .eyebrow { display: block; }
+.btc-section .lede { margin-top: 0.6rem; }
+
+.btc-live-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.45rem;
+  font-family: var(--font-mono, "IBM Plex Mono", ui-monospace, monospace);
+  font-size: 0.72rem;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+}
+.btc-live-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 0 rgba(247, 147, 26, 0.55);
+  animation: btcDotPulse 2s ease-in-out infinite;
+}
+@keyframes btcDotPulse {
+  0% { box-shadow: 0 0 0 0 rgba(247, 147, 26, 0.55); }
+  70% { box-shadow: 0 0 0 6px rgba(247, 147, 26, 0); }
+  100% { box-shadow: 0 0 0 0 rgba(247, 147, 26, 0); }
+}
+
+/* ---------- Karten-Grundgerüst ---------- */
+.btc-card {
+  background: var(--card-bg, rgba(255,255,255,0.03));
+  border: 1px solid var(--line-node, rgba(255,255,255,0.18));
+  border-radius: var(--radius, 12px);
+  padding: clamp(1.4rem, 3vw, 2rem);
+}
+
+/* ---------- Preis-Ticker ---------- */
+.btc-ticker-card {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 1.5rem;
+  align-items: center;
+}
+.btc-price-row {
+  display: flex;
+  align-items: baseline;
+  gap: 0.9rem;
+  flex-wrap: wrap;
+}
+.btc-price {
+  font-family: var(--font-display, Georgia, serif);
+  font-size: clamp(2rem, 5vw, 2.8rem);
+  color: var(--heading);
+  font-weight: 700;
+  line-height: 1;
+}
+.btc-price.is-loading { color: var(--muted); font-size: 1.4rem; }
+.btc-change {
+  font-family: var(--font-mono, monospace);
+  font-size: 0.9rem;
+  padding: 0.2rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.06);
+}
+.btc-change.is-up { color: #6fd88a; }
+.btc-change.is-down { color: #f2665c; }
+.btc-updated {
+  margin-top: 0.4rem;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  color: var(--muted);
+}
+
+/* ---------- Umschalter (EUR/USD, Zeitraum) ---------- */
+.btc-toggle-group {
+  display: inline-flex;
+  border: 1px solid var(--line-node, rgba(255,255,255,0.18));
+  border-radius: 999px;
+  padding: 3px;
+  gap: 3px;
+  background: var(--bg-3, #060810);
+}
+.btc-toggle-group button {
+  border: none;
+  background: transparent;
+  color: var(--muted);
+  font-family: var(--font-mono, monospace);
+  font-size: 0.78rem;
+  letter-spacing: 0.03em;
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  cursor: pointer;
+  transition: background .15s ease, color .15s ease;
+}
+.btc-toggle-group button.is-active {
+  background: var(--accent);
+  color: var(--on-accent, #1a1006);
+}
+.btc-toggle-group button:hover:not(.is-active) { color: var(--accent-soft); }
+
+.btc-controls {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.9rem;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 1.6rem;
+}
+
+/* ---------- Chart ---------- */
+.btc-chart-card { margin-top: 1.4rem; }
+.btc-chart-wrap { position: relative; height: 280px; margin-top: 0.5rem; }
+.btc-chart-wrap canvas { width: 100% !important; height: 100% !important; }
+.btc-chart-status {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.82rem;
+  color: var(--muted);
+  text-align: center;
+  padding: 1rem;
+}
+.btc-chart-status.is-visible { display: flex; }
+
+/* ---------- Stat-Grid (Bitcoin Live Infos Seite) ---------- */
+.btc-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+  gap: 1px;
+  margin-top: 2rem;
+  background: var(--line);
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 12px);
+  overflow: hidden;
+}
+.btc-stat {
+  background: var(--bg-2, #0a0e1a);
+  padding: clamp(1.4rem, 2.6vw, 1.9rem);
+}
+.btc-stat .eyebrow { display: block; margin-bottom: 0.7rem; }
+.btc-stat-value {
+  font-family: var(--font-display, Georgia, serif);
+  font-size: 1.7rem;
+  color: var(--heading);
+  font-weight: 700;
+  line-height: 1.15;
+}
+.btc-stat-sub {
+  margin-top: 0.4rem;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.78rem;
+  color: var(--muted);
+}
+.btc-stat.is-error .btc-stat-value { font-size: 0.95rem; color: var(--muted); font-family: var(--font-mono, monospace); font-weight: 400; }
+
+/* ---------- Gebühren-Kacheln ---------- */
+.btc-fee-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 0.9rem;
+  margin-top: 1rem;
+}
+.btc-fee-tile {
+  text-align: center;
+  padding: 1.1rem 0.6rem;
+  border: 1px solid var(--line);
+  border-radius: var(--radius, 12px);
+  background: var(--bg-3, #060810);
+}
+.btc-fee-tile .eyebrow { font-size: 0.66rem; }
+.btc-fee-tile .btc-fee-val {
+  margin-top: 0.5rem;
+  font-family: var(--font-mono, monospace);
+  font-size: 1.5rem;
+  color: var(--accent-soft);
+  font-weight: 500;
+}
+.btc-fee-tile .btc-fee-unit { font-size: 0.72rem; color: var(--muted); }
+
+/* ---------- Fortschrittsbalken (Difficulty, Halving) ---------- */
+.btc-progress-track {
+  margin-top: 1rem;
+  height: 8px;
+  border-radius: 999px;
+  background: var(--bg-3, #060810);
+  border: 1px solid var(--line);
+  overflow: hidden;
+}
+.btc-progress-fill {
+  height: 100%;
+  background: linear-gradient(90deg, var(--accent), var(--accent-soft));
+  border-radius: 999px;
+  transition: width .4s ease;
+}
+
+/* ---------- Fear & Greed ---------- */
+.btc-fng-scale {
+  margin-top: 1rem;
+  height: 10px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #f2665c 0%, #f2a65c 25%, #e8d15c 50%, #a8d86f 75%, #6fd88a 100%);
+  position: relative;
+}
+.btc-fng-marker {
+  position: absolute;
+  top: -5px;
+  width: 3px;
+  height: 20px;
+  background: var(--heading);
+  border-radius: 2px;
+  transform: translateX(-50%);
+  transition: left .4s ease;
+}
+
+/* ---------- Quellenhinweis ---------- */
+.btc-source-note {
+  margin-top: 2rem;
+  font-family: var(--font-mono, monospace);
+  font-size: 0.72rem;
+  color: var(--muted);
+  line-height: 1.7;
+}
+.btc-source-note a { color: var(--muted); text-decoration: underline; }
+.btc-source-note a:hover { color: var(--accent-soft); }
+
+@media (max-width: 720px) {
+  .btc-ticker-card { grid-template-columns: 1fr; }
+  .btc-controls { flex-direction: column; align-items: flex-start; }
+}

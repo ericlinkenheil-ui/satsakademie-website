@@ -13,6 +13,14 @@
    - Gebühren + Difficulty + Blockhöhe + Hashrate: mempool.space Public API.
      Fallback für Gebühren + Blockhöhe: blockstream.info Esplora API (dieselbe
      Datenbasis, unabhängiger Anbieter) – falls mempool.space nicht erreichbar ist.
+     Zusätzlicher zweiter Fallback für Blockhöhe + Hashrate + Difficulty (seit
+     19.09.2026, Fortsetzung 3): blockchain.info "Simple Query API"
+     (blockchain.info/q/...), da mempool.space in der Praxis öfter mal für
+     einzelne Besucher/IP-Bereiche 503 liefert (Cloudflare-Bot-Schutz) und
+     Difficulty/Hashrate bis dahin gar keinen Fallback hatten. Die
+     Difficulty-Fortschrittsanzeige wird in diesem Fall rein rechnerisch aus
+     der Blockhöhe geschätzt (kein exaktes "erwartete Änderung"-Prozent
+     verfügbar, siehe fetchDifficulty).
    - Fear & Greed Index: alternative.me Crypto Fear & Greed Index API.
 
    Stand: 19.09.2026 (siehe knotenpunkt-website-fahrplan.md, Abschnitt
@@ -129,39 +137,76 @@
     });
   }
 
-  /* ---------- Difficulty-Adjustment (mempool.space, kein Fallback bekannt) ---------- */
+  var DIFFICULTY_EPOCH_BLOCKS = 2016;
+
+  /* Rein rechnerische Schätzung, falls mempool.space nicht erreichbar ist:
+     liefert dieselben Felder wie die mempool.space-Antwort, aber ohne
+     "difficultyChange" (dafür bräuchte man die historischen Blockzeiten
+     der laufenden Periode, die blockchain.info/blockstream.info so nicht
+     hergeben) – die Oberfläche blendet das Feld in diesem Fall aus. */
+  function estimateDifficultyFromHeight(height) {
+    var intoEpoch = height % DIFFICULTY_EPOCH_BLOCKS;
+    var remainingBlocks = DIFFICULTY_EPOCH_BLOCKS - intoEpoch;
+    var progressPercent = (intoEpoch / DIFFICULTY_EPOCH_BLOCKS) * 100;
+    var estimatedRetargetDate = new Date(Date.now() + remainingBlocks * AVG_BLOCK_SECONDS * 1000).toISOString();
+    return {
+      progressPercent: progressPercent,
+      remainingBlocks: remainingBlocks,
+      difficultyChange: null,
+      estimatedRetargetDate: estimatedRetargetDate,
+      estimated: true
+    };
+  }
+
+  /* ---------- Difficulty-Adjustment (mempool.space, Fallback: rechnerische
+     Schätzung aus der Blockhöhe, siehe estimateDifficultyFromHeight) ---------- */
 
   function fetchDifficulty() {
     return withCache("difficulty", 5 * 60 * 1000, function () {
-      return fetchWithTimeout("https://mempool.space/api/v1/difficulty-adjustment", 9000);
-    });
-  }
-
-  /* ---------- Blockhöhe (mempool.space, Fallback blockstream.info) ---------- */
-
-  function fetchBlockHeight() {
-    return withCache("height", 60 * 1000, function () {
-      return fetch("https://mempool.space/api/blocks/tip/height").then(function (res) {
-        if (!res.ok) throw new Error("HTTP " + res.status);
-        return res.text();
-      }).then(function (t) {
-        return parseInt(t, 10);
-      }).catch(function () {
-        return fetch("https://blockstream.info/api/blocks/tip/height").then(function (res) {
-          if (!res.ok) throw new Error("HTTP " + res.status);
-          return res.text();
-        }).then(function (t) { return parseInt(t, 10); });
+      return fetchWithTimeout("https://mempool.space/api/v1/difficulty-adjustment", 9000).catch(function () {
+        return fetchBlockHeight().then(estimateDifficultyFromHeight);
       });
     });
   }
 
-  /* ---------- Netzwerk-Hashrate (mempool.space) ---------- */
+  /* ---------- Blockhöhe (mempool.space, Fallback blockstream.info, dann blockchain.info) ---------- */
+
+  function fetchHeightFrom(url, parse) {
+    return fetch(url).then(function (res) {
+      if (!res.ok) throw new Error("HTTP " + res.status);
+      return res.text();
+    }).then(parse || function (t) { return parseInt(t, 10); });
+  }
+
+  function fetchBlockHeight() {
+    return withCache("height", 60 * 1000, function () {
+      return fetchHeightFrom("https://mempool.space/api/blocks/tip/height")
+        .catch(function () {
+          return fetchHeightFrom("https://blockstream.info/api/blocks/tip/height");
+        })
+        .catch(function () {
+          return fetchHeightFrom("https://blockchain.info/q/getblockcount?cors=true");
+        });
+    });
+  }
+
+  /* ---------- Netzwerk-Hashrate (mempool.space, Fallback blockchain.info) ---------- */
 
   function fetchHashrate() {
     return withCache("hashrate", 5 * 60 * 1000, function () {
       return fetchWithTimeout("https://mempool.space/api/v1/mining/hashrate/1m", 9000).then(function (d) {
         if (!d || typeof d.currentHashrate !== "number") throw new Error("Unerwartete Antwort");
         return d.currentHashrate; // Hash/s
+      }).catch(function () {
+        /* blockchain.info liefert GH/s (24h-Schätzung) als reinen Zahlentext */
+        return fetch("https://blockchain.info/q/hashrate?cors=true").then(function (res) {
+          if (!res.ok) throw new Error("HTTP " + res.status);
+          return res.text();
+        }).then(function (t) {
+          var ghs = parseFloat(t);
+          if (isNaN(ghs)) throw new Error("Unerwartete Antwort");
+          return ghs * 1e9; // GH/s -> Hash/s
+        });
       });
     });
   }

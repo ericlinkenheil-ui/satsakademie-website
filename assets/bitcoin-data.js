@@ -171,11 +171,22 @@
 
   /* ---------- Blockhöhe (mempool.space, Fallback blockstream.info, dann blockchain.info) ---------- */
 
-  function fetchHeightFrom(url, parse) {
-    return fetch(url).then(function (res) {
+  function fetchHeightFrom(url, parse, timeoutMs) {
+    var controller = ("AbortController" in window) ? new AbortController() : null;
+    var timer = null;
+    var opts = {};
+    if (controller) {
+      opts.signal = controller.signal;
+      timer = setTimeout(function () { controller.abort(); }, timeoutMs || 6000);
+    }
+    return fetch(url, opts).then(function (res) {
+      if (timer) clearTimeout(timer);
       if (!res.ok) throw new Error("HTTP " + res.status);
       return res.text();
-    }).then(parse || function (t) { return parseInt(t, 10); });
+    }).then(parse || function (t) { return parseInt(t, 10); }).catch(function (err) {
+      if (timer) clearTimeout(timer);
+      throw err;
+    });
   }
 
   function fetchBlockHeight() {

@@ -248,8 +248,8 @@
     return {
       nextHeight: nextHeight,
       blocksRemaining: blocksRemaining,
-      currentReward: 50 / Math.pow(2, epoch + 1),
-      nextReward: 50 / Math.pow(2, epoch + 2),
+      currentReward: 50 / Math.pow(2, epoch),
+      nextReward: 50 / Math.pow(2, epoch + 1),
       estDate: estDate
     };
   }

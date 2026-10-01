@@ -3,22 +3,22 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Blog von SatsAkademie – Updates, Denkanstöße und Blicke hinter die Kulissen, während Website und Kursreihe entstehen.">
-<link rel="canonical" href="https://www.satsakademie.de/blog.html" />
+<meta name="description" content="Eine defekte SSD mit gesunden S.M.A.R.T.-Werten, eine gescheiterte Garantiemeldung und vier Wochen Sync-Stillstand mit drei sich überlagernden Ursachen – die komplette Fehlersuche einer eigenen RaspiBlitz-Node, Schritt für Schritt.">
+<link rel="canonical" href="https://www.satsakademie.de/blog-raspiblitz-sync-stillstand.html" />
 <meta property="og:type" content="website" />
 <meta property="og:site_name" content="SatsAkademie" />
 <meta property="og:locale" content="de_DE" />
-<meta property="og:url" content="https://www.satsakademie.de/blog.html" />
-<meta property="og:title" content="Blog – SatsAkademie" />
-<meta property="og:description" content="Blog von SatsAkademie – Updates, Denkanstöße und Blicke hinter die Kulissen, während Website und Kursreihe entstehen." />
+<meta property="og:url" content="https://www.satsakademie.de/blog-raspiblitz-sync-stillstand.html" />
+<meta property="og:title" content="Vier Wochen Sync-Stillstand – SatsAkademie Blog" />
+<meta property="og:description" content="Eine defekte SSD mit gesunden S.M.A.R.T.-Werten, eine gescheiterte Garantiemeldung und vier Wochen Sync-Stillstand mit drei sich überlagernden Ursachen – die komplette Fehlersuche einer eigenen RaspiBlitz-Node, Schritt für Schritt.">
 <meta property="og:image" content="https://www.satsakademie.de/assets/og-image.jpg" />
 <meta property="og:image:width" content="1200" />
 <meta property="og:image:height" content="630" />
 <meta name="twitter:card" content="summary_large_image" />
-<meta name="twitter:title" content="Blog – SatsAkademie" />
-<meta name="twitter:description" content="Blog von SatsAkademie – Updates, Denkanstöße und Blicke hinter die Kulissen, während Website und Kursreihe entstehen." />
+<meta name="twitter:title" content="Vier Wochen Sync-Stillstand – SatsAkademie Blog" />
+<meta name="twitter:description" content="Eine defekte SSD mit gesunden S.M.A.R.T.-Werten, eine gescheiterte Garantiemeldung und vier Wochen Sync-Stillstand mit drei sich überlagernden Ursachen – die komplette Fehlersuche einer eigenen RaspiBlitz-Node, Schritt für Schritt.">
 <meta name="twitter:image" content="https://www.satsakademie.de/assets/og-image.jpg" />
-<title>Blog – SatsAkademie</title>
+<title>Vier Wochen Sync-Stillstand – SatsAkademie Blog</title>
 <style>
   :root{
     --bg-1:#131a2c;
@@ -30,8 +30,6 @@
     --body:#b9c2d6;
     --muted:#8b93ab;
     --line:rgba(255,255,255,0.09);
-    --line-node:rgba(255,255,255,0.16);
-    --card-bg:rgba(255,255,255,0.03);
     --focus:#ffcf8c;
   }
 
@@ -53,7 +51,7 @@
   }
 
   .wrap{
-    max-width:760px;
+    max-width:680px;
     margin:0 auto;
     padding:64px 24px 80px;
   }
@@ -101,7 +99,7 @@
     margin-top:44px;
     font-family:"IBM Plex Mono", ui-monospace, monospace;
     font-size:0.72rem;
-    letter-spacing:0.12em;
+    letter-spacing:0.1em;
     text-transform:uppercase;
     color:var(--accent-soft);
   }
@@ -110,89 +108,125 @@
     margin-top:14px;
     font-family:"IBM Plex Serif", ui-serif, Georgia, serif;
     font-weight:700;
-    font-size:clamp(32px, 5vw, 46px);
+    font-size:clamp(28px, 5vw, 40px);
     letter-spacing:-0.5px;
+    line-height:1.18;
     color:var(--heading);
   }
 
-  .lede{
+  .dek{
     margin-top:18px;
     font-size:17px;
-    line-height:1.65;
-    max-width:58ch;
+    line-height:1.6;
     color:var(--body);
   }
 
-  .posts{
-    margin-top:48px;
-    display:flex;
-    flex-direction:column;
-    gap:1px;
-    background:var(--line);
-    border:1px solid var(--line);
-    border-radius:16px;
-    overflow:hidden;
+  article p{
+    margin-top:20px;
+    font-size:17px;
+    line-height:1.75;
+    color:var(--body);
   }
+  article p:first-of-type{ margin-top:36px; }
+  article strong{ color:var(--heading); font-weight:600; }
 
-  .post-card{
-    background:var(--bg-2);
-    padding:28px;
-    text-decoration:none;
-    display:block;
-    transition:background .15s ease;
-  }
-  .post-card:hover{ background:rgba(255,255,255,0.035); }
-
-  .post-date{
-    font-family:"IBM Plex Mono", ui-monospace, monospace;
-    font-size:12px;
-    letter-spacing:0.06em;
-    text-transform:uppercase;
-    color:var(--muted);
-  }
-
-  .post-title{
-    margin-top:10px;
+  h2{
+    margin-top:40px;
     font-family:"IBM Plex Serif", ui-serif, Georgia, serif;
     font-weight:600;
-    font-size:22px;
+    font-size:21px;
     color:var(--heading);
   }
 
-  .post-excerpt{
-    margin-top:10px;
+  .callout{
+    margin-top:24px;
+    padding:18px 20px;
+    border-radius:14px;
+    border:1px solid var(--line);
+    background:rgba(255,255,255,0.03);
     font-size:15px;
-    line-height:1.6;
+    line-height:1.65;
     color:var(--body);
-    max-width:62ch;
   }
+  .callout b{ color:var(--accent-soft); font-weight:600; }
 
-  .post-more{
-    margin-top:14px;
-    display:inline-flex;
-    align-items:center;
-    gap:6px;
+  .warn{
+    margin-top:24px;
+    padding:18px 20px;
+    border-radius:14px;
+    border:1px solid rgba(239,68,68,0.35);
+    background:rgba(239,68,68,0.06);
+    font-size:15px;
+    line-height:1.65;
+    color:var(--body);
+  }
+  .warn b{ color:#ffb4b0; font-weight:600; }
+
+  code{
     font-family:"IBM Plex Mono", ui-monospace, monospace;
-    font-size:12px;
-    letter-spacing:0.04em;
-    text-transform:uppercase;
+    font-size:0.88em;
+    background:rgba(255,255,255,0.06);
+    padding:0.15em 0.4em;
+    border-radius:4px;
     color:var(--accent-soft);
   }
 
-  .empty-note{
+  pre{
     margin-top:18px;
-    padding:18px 20px;
-    border-radius:14px;
-    border:1px dashed var(--line-node);
-    font-size:14px;
+    padding:16px 18px;
+    border-radius:12px;
+    border:1px solid var(--line);
+    background:var(--bg-3);
+    overflow-x:auto;
+  }
+  pre code{
+    background:none;
+    padding:0;
+    color:var(--heading);
+    font-size:13.5px;
     line-height:1.6;
-    color:var(--muted);
   }
 
+  article a.inline{
+    color:var(--accent-soft);
+    text-decoration:none;
+    border-bottom:1px solid rgba(255,177,78,0.4);
+    padding-bottom:1px;
+    transition:border-color .15s ease, color .15s ease;
+  }
+  article a.inline:hover{ color:var(--heading); border-color:var(--heading); }
+
+  .cta{
+    margin-top:44px;
+    padding:24px;
+    border-radius:16px;
+    border:1px solid rgba(247,147,26,0.35);
+    background:rgba(247,147,26,0.06);
+  }
+  .cta p{ margin-top:0; font-size:15px; line-height:1.6; color:var(--body); }
+  .cta .row{ margin-top:16px; display:flex; flex-wrap:wrap; gap:12px; }
+  .cta a{
+    display:inline-flex;
+    align-items:center;
+    gap:8px;
+    padding:10px 18px;
+    border-radius:999px;
+    font-family:"IBM Plex Mono", ui-monospace, monospace;
+    font-size:13px;
+    font-weight:500;
+    letter-spacing:0.3px;
+    text-decoration:none;
+    border:1px solid rgba(247,147,26,0.5);
+    color:var(--accent-soft);
+    transition:background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .cta a:hover{ background:rgba(247,147,26,0.15); border-color:var(--accent); color:var(--heading); }
+  .cta svg{ width:16px; height:16px; flex-shrink:0; }
+
+  hr{ margin-top:56px; border:none; border-top:1px solid var(--line); }
+
   footer{
-    margin-top:56px;
-    padding-top:24px;
-    border-top:1px solid var(--line);
+    margin-top:24px;
     display:flex;
     flex-wrap:wrap;
     justify-content:space-between;
@@ -202,7 +236,6 @@
     letter-spacing:0.4px;
     color:var(--muted);
   }
-
   .legal-link{
     color:var(--muted);
     text-decoration:none;
@@ -218,30 +251,6 @@
     line-height:1.5;
     letter-spacing:0.2px;
     opacity:0.75;
-  }
-
-  .tabs{
-    margin-top:32px;
-    display:flex;
-    gap:10px;
-  }
-  .tab{
-    padding:8px 16px;
-    border-radius:999px;
-    border:1px solid var(--line);
-    font-family:"IBM Plex Mono", ui-monospace, monospace;
-    font-size:12px;
-    letter-spacing:0.05em;
-    text-transform:uppercase;
-    color:var(--muted);
-    text-decoration:none;
-    transition:color .15s ease, border-color .15s ease, background .15s ease;
-  }
-  .tab:hover{ color:var(--body); border-color:var(--line-node); }
-  .tab.active{
-    border-color:rgba(247,147,26,0.5);
-    background:rgba(247,147,26,0.1);
-    color:var(--accent-soft);
   }
 </style>
 
@@ -351,36 +360,73 @@
 </nav>
 
 <div class="wrap">
-  <div class="tabs">
-    <a class="tab active" href="blog.html">Blog</a>
-    <a class="tab" href="news.html">News</a>
-  </div>
+  <p class="eyebrow">30. September 2026</p>
+  <h1>Warum meine Node vier Wochen nicht synchronisierte, obwohl offiziell alles in Ordnung war</h1>
+  <p class="dek">Erst eine SSD, die sich gesund meldete und trotzdem praktisch unbenutzbar war. Dann eine Garantiemeldung, die an einem kaputten Formularfeld scheiterte. Und am Ende drei verschiedene Ursachen, die sich gegenseitig überlagerten und einzeln behoben werden mussten, bevor die Node wieder lief.</p>
 
-  <p class="eyebrow">Aus der Werkstatt</p>
-  <h1>Blog</h1>
-  <p class="lede">Tiefere Beiträge, wenn es etwas Substanzielles zu erzählen gibt – Troubleshooting aus dem eigenen Node-Aufbau, Hintergründe und Entscheidungen rund um Website und Kursreihe. Kein festes Datum, dafür Substanz. Für die tägliche Kurzeinordnung aktueller Bitcoin-News gibt es die <a class="legal-link" href="news.html" style="color:var(--accent-soft); border-color:rgba(255,177,78,0.4);">News</a>.</p>
+  <article>
+    <p>Meine RaspiBlitz-Node läuft auf einem Raspberry Pi 5 mit 8 GB RAM, Hardware nach der Empfehlung von Blocktrainer: 52Pi-Metallgehäuse, ein UGREEN-USB-zu-SATA-Gehäuse mit einer SanDisk-SSD, das originale 27-Watt-Netzteil, eine SanDisk Extreme Pro als microSD-Karte. Auf den Lightning-Kanälen lag zu dem Zeitpunkt kein Guthaben – kein Backup- oder Seed-Risiko also, nur eine Node, die nicht mehr wollte, wie sie sollte.</p>
 
-  <div class="posts">
-    <a class="post-card" href="blog-raspiblitz-sync-stillstand.html">
-      <div class="post-date">30. September 2026</div>
-      <div class="post-title">Warum meine Node vier Wochen nicht synchronisierte, obwohl offiziell alles in Ordnung war</div>
-      <p class="post-excerpt">Erst eine SSD, die sich laut S.M.A.R.T. gesund meldete und trotzdem unbenutzbar war. Dann drei sich überlagernde Ursachen – RAM/Swap, eine veraltete Portweiterleitung und ein Port, der sich bei jedem Neustart neu würfelt – bis die Synchronisation wieder lief.</p>
-      <div class="post-more">Weiterlesen →</div>
-    </a>
-    <a class="post-card" href="blog-doppelt-flashen-raspiblitz.html">
-      <div class="post-date">09. September 2026</div>
-      <div class="post-title">Warum du beim RaspiBlitz-Setup manchmal zweimal flashen musst</div>
-      <p class="post-excerpt">Beim Einbau einer brandneuen Ersatz-Festplatte tauchte derselbe Fehler wieder auf wie beim allerersten Setup – und verlangte erneut einen Neuflash der SD-Karte. Kein Zufall, wie ein offenes GitHub-Issue zeigt.</p>
-      <div class="post-more">Weiterlesen →</div>
-    </a>
-  </div>
+    <h2>Der erste Verdacht: eine SSD, die sich gesund meldet und trotzdem nicht funktioniert</h2>
+    <p>Das WebUI zeigte irgendwann nur noch „401 Unauthorized", das Display am Gehäuse „6 Neustarts" während des Blockchain-Syncs. <code>dmesg</code> bestätigte den Verdacht: wiederholte I/O-Fehler (<code>I/O error, dev sda, sector ...</code>) und EXT4-Dateisystemwarnungen auf mehreren Sektoren. Das Muster einer defekten SSD, die bitcoind in eine Neustart-Schleife zwingt und damit auch gleich das WebUI-Backend mit lahmlegt.</p>
+    <p>Zur Absicherung lief die Platte zusätzlich durch CrystalDiskInfo (S.M.A.R.T.-Werte) und HD Tune (Error-Scan, Benchmark). Und genau hier wurde es interessant: S.M.A.R.T. meldete „gesund" – der reale Durchsatz im Error-Scan brach trotzdem auf etwa 1 MB/s ein, statt der beworbenen 545 MB/s, und schwankte stark erratisch zwischen 41 und 185 MB/s statt stabiler 350–416 MB/s im Vergleich zu einer baugleichen, gesunden Referenz-SSD am selben Port. Auch die Echtheit der Platte habe ich anhand von Verpackungsfotos und dem physischen Label geprüft, trotz einer irreführenden Software-Anzeige „WD Green" war es zweifelsfrei eine originale SanDisk SSD PLUS 2TB.</p>
+    <div class="warn"><b>S.M.A.R.T.-Werte allein reichen nicht.</b> Eine SSD kann sich als „gesund" melden und trotzdem im realen Betrieb praktisch unbenutzbar sein. Bei Verdacht auf einen Defekt ist ein echter Benchmark- oder Error-Scan-Test unverzichtbar, nicht nur der S.M.A.R.T.-Status.</div>
 
-  <div class="empty-note">Neue Beiträge folgen laufend – am einfachsten nichts verpassen über <a class="legal-link" href="https://instagram.com/satsakademie" target="_blank" rel="noopener" style="color:var(--accent-soft); border-color:rgba(255,177,78,0.4);">@satsakademie auf Instagram</a> oder <a class="legal-link" href="https://x.com/SatsAkademie" target="_blank" rel="noopener" style="color:var(--accent-soft); border-color:rgba(255,177,78,0.4);">@SatsAkademie auf X</a>.</div>
+    <h2>Die Reklamation, die an einem Formularfeld scheiterte</h2>
+    <p>Das komplette Beweispaket – Fotos, das dmesg-Log, Benchmark-Screenshots – habe ich in einem PDF-Bericht gebündelt, als Grundlage für eine Garantiemeldung. Der Versuch, dafür ein Konto im WD/SanDisk-Supportportal anzulegen, scheiterte dann an einem hartnäckigen Bug im Telefonnummer-Validierungsfeld: Eine korrekt formatierte deutsche Mobilnummer wurde durchgehend abgelehnt, egal wie ich sie eingegeben habe. Statt weiter Zeit zu verlieren, bin ich auf die Amazon-Rückgabe-/Ersatz-Funktion ausgewichen – das ging unkompliziert. Als Ersatz kam eine neue SanDisk Ultra 3D SSD mit 2 TB (560 MB/s lesen, 520 MB/s schreiben), die problemlos ins vorhandene UGREEN-Gehäuse passte, da beide dem Standard-2,5"-SATA-Formfaktor folgen.</p>
+
+    <h2>Neu aufgesetzt, und trotzdem vier Wochen kein Fortschritt</h2>
+    <p>Mit der neuen SSD habe ich die Node komplett neu aufgesetzt, frische SD-Karte und frisch formatierte SSD. Dabei bewusst entschieden, weiter sowohl Tor als auch I2P zu betreiben, statt aus Bequemlichkeit auf reines Tor umzusteigen – ein Verzicht auf I2P wäre ein spürbarer Anonymitäts-Kompromiss gewesen.</p>
+    <p>Vier Wochen später hing die Blockchain-Synchronisation bei ca. 65 % fest. <code>getconnectioncount</code> zeigte durchgehend 0 aktive Peer-Verbindungen. Die Fehlersuche förderte diesmal nicht eine, sondern drei sich überlagernde Ursachen zutage, die ich nacheinander identifizieren und beheben musste.</p>
+
+    <h2>Ursache 1: zu viel Speicher für den Block-Cache reserviert</h2>
+    <p><code>free -h</code> zeigte nur noch ca. 106 MiB freien RAM und 5,4 von 10 GiB belegten Swap, <code>top</code> zeigte aktive <code>kswapd</code>/<code>kcompact</code>-Kernel-Threads und 25 % I/O-Wait – das klassische Muster für massives Swap-Thrashing. Der Auslöser stand direkt in meiner <code>bitcoin.conf</code>: <code>dbcache=4096</code> reservierte 4 GB RAM allein für den Block-Cache. Auf einem 8-GB-Pi, der parallel auch noch LND, Tor, I2P und fail2ball betreibt, viel zu aggressiv.</p>
+    <pre><code>sed -i 's/dbcache=4096/dbcache=1200/' bitcoin.conf</code></pre>
+    <p>Nach dem Neustart von bitcoind fiel die Swap-Nutzung von 5,4 GiB auf 773 MiB. Die Block-Validierungsgeschwindigkeit verbesserte sich dramatisch, von etwa 43 Blöcken in 25 Tagen auf mehrere hundert Blöcke pro Stunde.</p>
+
+    <h2>Ursache 2: eine veraltete Portweiterleitung am Router</h2>
+    <p>I2P wählt bei jeder frischen Installation zufällig einen neuen externen Port für eingehende Verbindungen (NTCP2/SSU2). Meine FritzBox leitete aber weiterhin den alten Port 11562 weiter, aus einem früheren, längst gelösten „Waiting for Peers"-Vorfall. Der aktuelle i2pd-Port, 13275, war am Router nie eingetragen worden. Beide FritzBox-Freigaben (TCP und UDP) auf 13275 korrigiert, dazu passende Firewall-Regeln auf dem Pi ergänzt:</p>
+    <pre><code>sudo ufw allow 13275/tcp
+sudo ufw allow 13275/udp</code></pre>
+
+    <h2>Ursache 3: der Port, der sich bei jedem Neustart neu würfelt</h2>
+    <p>Nach dem Neustart von i2pd zur Anwendung des Fixes aus Ursache 2 war das Problem sofort wieder da. <code>ss -tulnp</code> verriet, warum: i2pd lauschte jetzt auf einem komplett neuen Port, 21991, nicht mehr auf 13275. Der Grund: In der <code>i2pd.conf</code> war für NTCP2/SSU2 kein fester Port eingetragen. Ohne feste Vorgabe würfelt i2pd bei jedem Start einen neuen Port. Der eigentliche Fix lag also nicht am Router, sondern in der Konfiguration selbst:</p>
+    <pre><code>port = 13275</code></pre>
+    <p>Diese Zeile oberhalb der <code>[http]</code>-Sektion in <code>/etc/i2pd/i2pd.conf</code> ergänzt und i2pd neu gestartet. Seitdem bleibt der Port über Neustarts hinweg stabil und deckt sich dauerhaft mit Router- und Firewall-Freigabe.</p>
+    <div class="callout">Die Verifikation danach war eindeutig: <code>ss -tnp | grep i2pd</code> zeigte 12 aktive externe I2P-Verbindungen statt zuvor nur einer einzigen. <code>getconnectioncount</code> stieg von 0 auf 2 und blieb stabil. Im <code>debug.log</code> war ein kontinuierlicher Block-Fortschritt sichtbar, die Blockhöhe stieg im Minutentakt, der Sync-Fortschritt kletterte über die vorherigen 65,58 % hinaus.</div>
+
+    <h2>Was bei so einer Fehlersuche eigentlich zählt</h2>
+    <p>Erst als alle drei Ursachen nacheinander behoben waren, RAM/Swap, die alte Portweiterleitung und der zufällige Port-Wechsel, normalisierte sich der Betrieb. Ein einzelner Fix allein hätte das Symptom nicht vollständig erklärt, und genau das macht diese Art von Fehlersuche eigentlich aus: Anonymitätsnetzwerke wie I2P sind beweglich, Ports können sich bei einer Neuinstallation und bei jedem Neustart ändern, wenn sie nicht explizit fixiert werden. Eine einmal eingerichtete Portweiterleitung ist keine Garantie für Dauerhaftigkeit. Geholfen hat am Ende vor allem, jede Ursache einzeln über die Log-Auswertung zu isolieren, statt vorschnell mehrere Dinge gleichzeitig zu ändern, das machte am Ende nachvollziehbar, welcher Schritt tatsächlich gewirkt hat.</p>
+
+    <p>Genau solche Stellen, dort wo die offizielle Doku aufhört und die Praxis anfängt, sind der Grund, warum Modul 4 der Kursreihe (Full Node auf dem Raspberry Pi 5) nicht nur die Schritte zeigt, die glatt laufen, sondern auch die, die es nicht tun. Mit den echten Log-Ausgaben und Werten aus dem eigenen Fehlerbild, nicht nachgestellt.</p>
+
+    <div class="cta">
+      <p>Willst du benachrichtigt werden, sobald Modul 4 startet?</p>
+      <div class="row">
+        <a href="mailto:kontakt@satsakademie.de?subject=Vorab-Info%20Modul%204">kontakt@satsakademie.de</a>
+        <a href="https://instagram.com/satsakademie" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <rect x="3" y="3" width="18" height="18" rx="5.5" stroke="currentColor" stroke-width="1.8"/>
+            <circle cx="12" cy="12" r="4.2" stroke="currentColor" stroke-width="1.8"/>
+            <circle cx="17.3" cy="6.7" r="1.15" fill="currentColor"/>
+          </svg>
+          @satsakademie
+        </a>
+        <a href="https://x.com/SatsAkademie" target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" fill="currentColor" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+            <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+          </svg>
+          @SatsAkademie
+        </a>
+      </div>
+    </div>
+  </article>
+
+  <hr>
 
   <footer>
     <span>
       <a class="legal-link" href="kursreihe.html">Kursreihe</a>
-      · <a class="legal-link" href="news.html">News</a>
       · <a class="legal-link" href="bitcoin-live-infos.html">Bitcoin Live Infos</a>
       · <a class="legal-link" href="impressum.html">Impressum</a>
       · <a class="legal-link" href="datenschutz.html">Datenschutz</a>
@@ -404,7 +450,6 @@
       "blog.html": "https://claude.ai/code/artifact/c62cdf4a-2f3b-4ccf-8fbd-d1d5b8456179",
       "news.html": "https://claude.ai/code/artifact/f099c078-b7db-4261-9aae-85f386b75f18",
       "blog-doppelt-flashen-raspiblitz.html": "https://claude.ai/code/artifact/7bb62fd3-3208-4541-9cf3-a7eac77761a3",
-      "blog-raspiblitz-sync-stillstand.html": "https://claude.ai/artifact/6YWWWstzB64jVwSzfV2oh1",
       "impressum.html": "https://claude.ai/code/artifact/f4f28b13-573a-4dc2-aeca-549d53cdead6",
       "datenschutz.html": "https://claude.ai/code/artifact/caca047c-d01e-42f5-aba2-ea721e8a1ab7"
     };
